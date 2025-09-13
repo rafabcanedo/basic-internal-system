@@ -1,13 +1,12 @@
 "use client"
 
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { useForm, FormProvider } from "react-hook-form"
 import * as yup from "yup"
 import { yupResolver } from "@hookform/resolvers/yup"
-import Link from "next/link"
 import { HookFormTextInput } from "@/components/hook-form-text-input"
+import Link from "next/link"
 
 interface IForm {
   email: string;
@@ -43,8 +42,8 @@ export default function SignInForm() {
         <CardTitle className="text-center">Sign In</CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
-       <HookFormTextInput name="email" label="Email" type="text" />
-       <HookFormTextInput name="password" label="Password" type="password" />
+       <HookFormTextInput title="Email" name="email" label="jhon@email.com" type="text" />
+       <HookFormTextInput title="Password" name="password" label="Password" type="password" />
       </CardContent>
       <CardFooter className="flex justify-end">
         <Button className="w-full" type="submit">
