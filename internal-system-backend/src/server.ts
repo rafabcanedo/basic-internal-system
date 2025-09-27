@@ -1,13 +1,16 @@
 import fastify from 'fastify'
-import { knex } from './database.js'
 import { env } from './env'
 
-const app = fastify()
-
-app.get('/hello', async () => {
-  const user = await knex('users').select('*')
-
-  return user
+const app = fastify({
+  logger: {
+    transport: {
+      target: 'pino-pretty',
+      options: {
+        translateTime: 'HH:MM:ss Z',
+        ignore: 'pid,hostname',
+      },
+    },
+  },
 })
 
 app
