@@ -3,6 +3,13 @@
 
 @custom-variant dark (&:is(.dark *));
 
+@theme {
+  --font-poppins: "Poppins", "serif";
+  --font-roboto: "Roboto", "serif";
+  --font-opens: "Open Sans", "serif";
+  --font-montserrat: "Montserrat", "serif";
+}
+
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
