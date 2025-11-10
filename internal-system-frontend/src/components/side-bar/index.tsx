@@ -28,7 +28,15 @@ const data = {
           isActive: true,
         },
         {
-          title: "My Schedule",
+          title: "My wallet",
+          url: "#",
+        },
+        {
+          title: "Add money",
+          url: "#",
+        },
+        {
+          title: "Payments",
           url: "#",
         },
         {
@@ -42,23 +50,11 @@ const data = {
       url: "#",
       items: [
         {
-          title: "How Can I Start?",
+          title: "How can I start?",
           url: "#",
         },
         {
-          title: "Item 1",
-          url: "#",
-        },
-        {
-          title: "Item 2",
-          url: "#",
-        },
-        {
-          title: "Item 3",
-          url: "#",
-        },
-        {
-          title: "Item 4",
+          title: "How it works",
           url: "#",
         },
         {
