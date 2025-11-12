@@ -7,6 +7,7 @@ import {
 } from "next/font/google";
 import "./globals.css";
 import { ReactNode } from "react";
+import { Toaster } from "@/components/ui/sonner";
 
 const poppins = Poppins({
   variable: "--font-poppins",
@@ -54,6 +55,7 @@ export default function RootLayout({
         `}
       >
         {children}
+        <Toaster richColors position="bottom-center" />
       </body>
     </html>
   );

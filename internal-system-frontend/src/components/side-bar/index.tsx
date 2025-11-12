@@ -24,12 +24,12 @@ const data = {
       items: [
         {
           title: "Home",
-          url: "#",
+          url: "/dashboard",
           isActive: true,
         },
         {
           title: "My wallet",
-          url: "#",
+          url: "/my-wallet",
         },
         {
           title: "Add money",
@@ -37,11 +37,11 @@ const data = {
         },
         {
           title: "Payments",
-          url: "#",
+          url: "payments",
         },
         {
           title: "My contacts",
-          url: "#",
+          url: "my-contacts",
         },
       ],
     },
@@ -60,6 +60,16 @@ const data = {
         {
           title: "Contact Us",
           url: "#",
+        },
+      ],
+    },
+    {
+      title: "My Account",
+      url: "#",
+      items: [
+        {
+          title: "My Account",
+          url: "/profile",
         },
       ],
     },

@@ -45,7 +45,16 @@ export default function SignInForm() {
        <HookFormTextInput title="Email" name="email" label="jhon@email.com" type="text" />
        <HookFormTextInput title="Password" name="password" label="Password" type="password" />
       </CardContent>
-      <CardFooter className="flex justify-end">
+      <CardFooter className="flex flex-col justify-end">
+        <div className="flex justify-end w-72 mb-2">
+         <Link
+          href="/forgot-your-password"
+          className="text-sm text-blue-500 hover:underline focus:outline-none"
+         >
+          Forgot Password?
+         </Link>
+        </div>
+
         <Button className="w-full" type="submit">
          Login
         </Button>
