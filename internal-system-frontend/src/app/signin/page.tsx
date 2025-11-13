@@ -3,30 +3,20 @@
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { useForm, FormProvider } from "react-hook-form"
-import * as yup from "yup"
 import { yupResolver } from "@hookform/resolvers/yup"
 import { HookFormTextInput } from "@/components/hook-form-text-input"
 import Link from "next/link"
+import { signInSchema } from "@/validations/schemas"
 
 interface IForm {
   email: string;
   password: string;
 }
 
-const schema = yup.object().shape({
-  email: yup
-   .string()
-   .email('Please enter a valid email.')
-   .required('Email is required.'),
-  password: yup
-   .string()
-   .min(6, 'Password must be at least 6 characters long.')
-   .required('Password is required.')
-})
-
 export default function SignInForm() {
   const methods = useForm<IForm>({
-    resolver: yupResolver(schema),
+    resolver: yupResolver(signInSchema),
+    mode: "onSubmit",
   });
 
   const handleOnSubmit = (data: IForm) => {

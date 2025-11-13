@@ -2,9 +2,10 @@ import React, { FC } from 'react'
 import { useFormContext } from 'react-hook-form';
 import { Input } from '../ui/input';
 
+type InputType = "text" | "password" | "number" | "email" | "tel";
 interface ITextInput {
   name: string;
-  type: "text" | "password" | "number";
+  type: InputType;
   label: string;
   title: string;
 }

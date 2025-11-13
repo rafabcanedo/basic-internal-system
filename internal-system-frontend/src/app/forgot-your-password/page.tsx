@@ -1,38 +1,29 @@
 "use client";
 
-import React, { useState } from "react";
-import { Input } from "@/components/ui/input";
+import React from "react";
+import { useForm, FormProvider } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-import * as yup from "yup"
+import { forgotPasswordSchema } from "@/validations/schemas";
+import { HookFormTextInput } from "@/components/hook-form-text-input";
 
-const schema = yup.object().shape({
-  email: yup
-    .string()
-    .email("Please enter a valid email address.")
-    .required("Email is required."),
-});
+type IForgotPassword = {
+  email: string;
+}
 
 export default function ForgotYourPassword() {
-  const [email, setEmail] = useState("");
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const methods = useForm<IForgotPassword>({
+    resolver: yupResolver(forgotPasswordSchema),
+    mode: "onSubmit",
+    defaultValues: { email: "" },
+  });
 
-    try {
-      await schema.validate({ email }, { abortEarly: false });
-
-      console.log("Password reset triggered for:", email);
-
-      toast.success("Password reset link sent to your email.");
-    } catch (err: unknown) {
-      if (err instanceof yup.ValidationError) {
-        toast.error(err.errors[0]);
-      } else {
-        toast.error("Something went wrong. Please try again later.");
-      }
-    }
+  const handleSubmit = async (data: IForgotPassword) => {
+   console.log("Password reset triggered for:", data.email);
+   toast.success("Password reset link sent to your email.");
   };
 
   const router = useRouter();
@@ -49,21 +40,17 @@ export default function ForgotYourPassword() {
           </span>
         </div>
 
+        <FormProvider {...methods}>
         <form
-          onSubmit={handleSubmit}
+          onSubmit={methods.handleSubmit(handleSubmit)}
           className="flex flex-col items-center justify-center space-y-1"
         >
-          <div>
-            <label htmlFor="" className="text-zinc-900 font-opens">
-              Email
-            </label>
-
-            <Input
-              type="email"
-              placeholder="Enter your email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-72 focus:outline focus:outline-primary"
+          <div className="w-70">
+            <HookFormTextInput
+             name="email"
+             title="Email"
+             label="Enter your email"
+             type="email"
             />
           </div>
 
@@ -73,6 +60,7 @@ export default function ForgotYourPassword() {
             </Button>
           </div>
         </form>
+        </FormProvider>
 
         <div className="flex justify-end mt-4">
           <button

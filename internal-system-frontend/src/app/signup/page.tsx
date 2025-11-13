@@ -3,10 +3,10 @@
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { useForm, FormProvider } from "react-hook-form"
-import * as yup from "yup"
 import { yupResolver } from "@hookform/resolvers/yup"
 import { HookFormTextInput } from "@/components/hook-form-text-input"
 import Link from "next/link"
+import { signUpSchema } from "@/validations/schemas"
 
 interface IRegisterAccount {
   name: string;
@@ -15,28 +15,10 @@ interface IRegisterAccount {
   phone: string;
 }
 
-const schema = yup.object().shape({
-  name: yup
-   .string()
-   .min(6, 'Password must be at least 6 characters long.')
-   .required('Name is required.'),
-  email: yup
-   .string()
-   .email('Please enter a valid email.')
-   .required('Email is required.'),
-  password: yup
-   .string()
-   .min(6, 'Password must be at least 6 characters long.')
-   .required('Password is required.'),
-  phone: yup
-   .string()
-   .matches(/^\(?\d{2}\)?[\s-]?\d{4,5}-?\d{4}$/, "Phone is invalid.")
-   .required('Phone is required.'),
-})
-
 export default function SignUpForm() {
   const methods = useForm<IRegisterAccount>({
-    resolver: yupResolver(schema),
+    resolver: yupResolver(signUpSchema),
+    mode: "onSubmit",
   })
 
   const handleRegisterAccount = (data: IRegisterAccount) => {
