@@ -13,7 +13,7 @@ const contactsMock: Contact[] = [
     name: "John Doe",
     email: "john.doe@example.com",
     phone: "555-0101",
-    category: ContactCategory.FRIENDS,
+    category: ContactCategory.FRIEND,
   },
   {
     id: 3,
@@ -34,7 +34,7 @@ const contactsMock: Contact[] = [
     name: "Maria Garcia",
     email: "maria.garcia@example.com",
     phone: "555-0104",
-    category: ContactCategory.FRIENDS,
+    category: ContactCategory.FRIEND,
   },
   {
     id: 6,
@@ -55,7 +55,7 @@ const contactsMock: Contact[] = [
     name: "Liam Brown",
     email: "liam.brown@example.com",
     phone: "555-0107",
-    category: ContactCategory.FRIENDS,
+    category: ContactCategory.FRIEND,
   },
 ]
 

@@ -22,8 +22,8 @@ export default function ForgotYourPassword() {
   });
 
   const handleSubmit = async (data: IForgotPassword) => {
-   console.log("Password reset triggered for:", data.email);
-   toast.success("Password reset link sent to your email.");
+    console.log("Password reset triggered for:", data.email);
+    toast.success("Password reset link sent to your email.");
   };
 
   const router = useRouter();
@@ -41,25 +41,25 @@ export default function ForgotYourPassword() {
         </div>
 
         <FormProvider {...methods}>
-        <form
-          onSubmit={methods.handleSubmit(handleSubmit)}
-          className="flex flex-col items-center justify-center space-y-1"
-        >
-          <div className="w-70">
-            <HookFormTextInput
-             name="email"
-             title="Email"
-             label="Enter your email"
-             type="email"
-            />
-          </div>
+          <form
+            onSubmit={methods.handleSubmit(handleSubmit)}
+            className="flex flex-col items-center justify-center space-y-1"
+          >
+            <div className="w-70">
+              <HookFormTextInput
+                name="email"
+                title="Email"
+                label="Enter your email"
+                type="email"
+              />
+            </div>
 
-          <div className="mt-4">
-            <Button size="sm" type="submit">
-              Reset my passoword
-            </Button>
-          </div>
-        </form>
+            <div className="mt-4">
+              <Button size="sm" type="submit">
+                Reset my passoword
+              </Button>
+            </div>
+          </form>
         </FormProvider>
 
         <div className="flex justify-end mt-4">
