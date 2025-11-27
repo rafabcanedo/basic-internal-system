@@ -1,0 +1,28 @@
+import { ContactCategory, TransactionCategory } from "@/mocks/types";
+
+interface ITypeBadge {
+  type: ContactCategory | TransactionCategory;
+}
+
+const categoryStyles: Record<string, string> = {
+  [TransactionCategory.FOOD]: "bg-blue-500/60 text-blue-800",
+  [TransactionCategory.PAYMENT]: "bg-green-500/60 text-green-800",
+  [TransactionCategory.TRANSFER]: "bg-purple-500/60 text-purple-800",
+  [TransactionCategory.ENTERTAINMENT]: "bg-emerald-500/60 text-emerald-800",
+
+  [ContactCategory.FAMILY]: "bg-blue-500/60 text-blue-800",
+  [ContactCategory.FRIEND]: "bg-yellow-300/60 text-yellow-800",
+  [ContactCategory.WORK]: "bg-green-500/60 text-green-800",
+};
+
+export function BadgeType({ type }: ITypeBadge) {
+  const style = categoryStyles[type] ?? "bg-blue-100 text-blue-800";
+
+  return (
+    <span
+      className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${style}`}
+    >
+      {type}
+    </span>
+  );
+}

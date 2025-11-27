@@ -7,6 +7,7 @@ import {
     TableRow,
 } from "@/components/ui/table"
 import { contactsMock } from "@/mocks/contacts-mock"
+import { BadgeType } from "@/utils/badge-types"
 import Link from "next/link"
 
 const LIMIT = 6
@@ -49,7 +50,7 @@ export const RecentContacts = () => {
                                     </TableCell>
 
                                     <TableCell className="text-right text-sm text-zinc-500">
-                                        {contact.category}
+                                        <BadgeType type={contact.category} />
                                     </TableCell>
                                 </TableRow>
                             ))}

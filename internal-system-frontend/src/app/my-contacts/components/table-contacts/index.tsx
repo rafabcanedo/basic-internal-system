@@ -7,6 +7,7 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { contactsMock } from "@/mocks/contacts-mock"
+import { BadgeType } from "@/utils/badge-types"
 
 export const TableContact = () => {
   return (
@@ -33,7 +34,9 @@ export const TableContact = () => {
                   <TableCell className="font-medium">{contact.name}</TableCell>
                   <TableCell>{contact.email}</TableCell>
                   <TableCell>{contact.phone}</TableCell>
-                  <TableCell className="text-right">{contact.category}</TableCell>
+                  <TableCell className="text-right">
+                    <BadgeType type={contact.category} />
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>

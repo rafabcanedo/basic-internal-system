@@ -9,6 +9,7 @@ import {
 import { transactionsMock } from "@/mocks/transactions-mock"
 import { contactsMock } from "@/mocks/contacts-mock"
 import Link from "next/link"
+import { BadgeType } from "@/utils/badge-types"
 
 const LIMIT = 6
 
@@ -53,7 +54,7 @@ export const LastTransactions = () => {
                     </TableCell>
 
                     <TableCell className="text-right text-sm text-zinc-500">
-                      {transaction.category}
+                      <BadgeType type={transaction.category} />
                     </TableCell>
                   </TableRow>
                 )
