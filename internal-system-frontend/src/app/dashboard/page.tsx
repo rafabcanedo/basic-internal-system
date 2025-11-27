@@ -6,6 +6,7 @@ import { User, WalletMinimal, ScanBarcode } from 'lucide-react';
 import { DashboardCards } from "./components/dashboard-cards";
 import { LastTransactions } from "./components/last-transactions";
 import { RecentContacts } from "./components/recent-contacts";
+import Reminders from "./components/reminders";
 
 export default function Dashboard() {
     return (
@@ -21,6 +22,10 @@ export default function Dashboard() {
                     <AddMoney />
                     <InitialHelper name="Payments" icon={ScanBarcode} link="/payments" />
                     <InitialHelper name="My contacts" icon={User} link="/my-contacts" />
+                </div>
+
+                <div className="mt-10 mb-8">
+                    <Reminders />
                 </div>
 
                 <div className="flex flex-col mt-10">
