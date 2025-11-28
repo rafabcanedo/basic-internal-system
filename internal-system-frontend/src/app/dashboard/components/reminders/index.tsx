@@ -1,4 +1,5 @@
-import { Button } from "@/components/ui/button"
+"use client";
+
 import {
     Table,
     TableBody,
@@ -7,8 +8,27 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table"
+import { CreateReminders } from "../create-reminders"
+import { useState } from "react";
+
+interface IReminder {
+    id: string;
+    name: string;
+    value: string;
+    date: Date;
+}
 
 export default function Reminders() {
+    const [reminders, setReminders] = useState<IReminder[]>([]);
+
+    const handleAddReminder = (reminder: Omit<IReminder, "id">) => {
+        const newReminder: IReminder = {
+            ...reminder,
+            id: crypto.randomUUID(),
+        };
+        setReminders((prev) => [...prev, newReminder]);
+    };
+
     return (
         <div className="mt-6 mb-6">
             <div className="w-full max-w-5xl rounded-xl border border-zinc-200 bg-white shadow-sm">
@@ -16,9 +36,7 @@ export default function Reminders() {
                     <h2 className="font-mono text-lg font-semibold text-zinc-600">
                         Reminders
                     </h2>
-                    <Button variant="outline">
-                        Create Reminder
-                    </Button>
+                    <CreateReminders onAddReminder={handleAddReminder} />
                 </header>
 
                 <div className="px-2 pb-2">
@@ -31,7 +49,27 @@ export default function Reminders() {
                             </TableRow>
                         </TableHeader>
                         <TableBody>
-
+                            {reminders.length === 0 ? (
+                                <TableRow>
+                                    <TableCell colSpan={3} className="text-center text-zinc-400">
+                                        No reminders yet
+                                    </TableCell>
+                                </TableRow>
+                            ) : (
+                                reminders.map((reminder) => (
+                                    <TableRow key={reminder.id}>
+                                        <TableCell className="font-medium">
+                                            {reminder.name}
+                                        </TableCell>
+                                        <TableCell className="text-right">
+                                            {reminder.value}
+                                        </TableCell>
+                                        <TableCell className="text-right">
+                                            {reminder.date.toLocaleDateString()}
+                                        </TableCell>
+                                    </TableRow>
+                                ))
+                            )}
                         </TableBody>
                     </Table>
                 </div>

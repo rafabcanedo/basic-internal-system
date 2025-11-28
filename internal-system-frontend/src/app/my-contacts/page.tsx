@@ -7,8 +7,8 @@ export default function MyContacts() {
     return (
         <SidebarProvider>
             <SideBar />
-            <div className="px-8">
-                <header className="flex flex-row items-center justify-between h-12">
+            <div className="px-8 w-full">
+                <header className="flex flex-row items-center justify-between h-12 mt-4">
                     <h1 className="font-montserrat text-xl text-zinc-600">Your contact list</h1>
                     <AddContact />
                 </header>

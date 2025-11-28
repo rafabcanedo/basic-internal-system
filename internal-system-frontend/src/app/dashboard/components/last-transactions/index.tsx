@@ -21,7 +21,7 @@ export const LastTransactions = () => {
       <div className="w-full max-w-5xl rounded-xl border border-zinc-200 bg-white shadow-sm">
         <div className="flex items-center justify-between px-6 pt-4 pb-2">
           <h2 className="font-mono text-lg font-semibold text-zinc-600">
-            Last Transactions
+            Last Payments
           </h2>
         </div>
 

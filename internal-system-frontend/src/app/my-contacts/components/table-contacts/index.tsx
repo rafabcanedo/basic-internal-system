@@ -12,7 +12,7 @@ import { BadgeType } from "@/utils/badge-types"
 export const TableContact = () => {
   return (
     <div className="w-full flex justify-center mt-6 mb-6">
-      <div className="w-full max-w-5xl rounded-xl border bg-white shadow-sm">
+      <div className="w-full max-w-7xl rounded-xl border bg-white shadow-sm">
         <div className="flex items-center justify-between px-6 pt-4 pb-2">
           <h2 className="text-lg">Contacts</h2>
           <span className="text-xs">{contactsMock.length} contacts</span>

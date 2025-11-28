@@ -24,11 +24,11 @@ export default function Dashboard() {
                     <InitialHelper name="My contacts" icon={User} link="/my-contacts" />
                 </div>
 
-                <div className="mt-10 mb-8">
-                    <Reminders />
-                </div>
-
                 <div className="flex flex-col mt-10">
+                    <div>
+                        <Reminders />
+                    </div>
+
                     <div>
                         <LastTransactions />
                     </div>
