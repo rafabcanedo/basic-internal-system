@@ -1,6 +1,6 @@
 import * as yup from "yup";
 import { emailField, passwordField, nameField, phoneField, trimmed, valueField, percentField } from "./fields";
-import { ContactCategory, CostCategory } from "@/mocks/types";
+import { ContactCategory, CostCategory } from "@/types";
 
 export const signInSchema = yup.object({
   email: trimmed(emailField()),

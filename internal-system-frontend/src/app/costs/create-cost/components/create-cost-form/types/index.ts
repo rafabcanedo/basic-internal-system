@@ -1,4 +1,4 @@
-import { CostCategory } from "@/mocks/types";
+import { CostCategory } from "@/types";
 
 export interface ICreateCostForm {
     contact: string;

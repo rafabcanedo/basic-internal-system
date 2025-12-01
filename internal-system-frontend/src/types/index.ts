@@ -35,7 +35,7 @@ export type Transaction = {
 
 export type Cost = {
  id: number;
- ContactId: number;
+ contactId: number;
  category: CostCategory;
  value: number;
  percent: number;

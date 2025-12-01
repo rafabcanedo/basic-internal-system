@@ -1,4 +1,4 @@
-import { Contact, ContactCategory } from "../types";
+import { Contact, ContactCategory } from "@/types";
 
 const contactsMock: Contact[] = [
   {

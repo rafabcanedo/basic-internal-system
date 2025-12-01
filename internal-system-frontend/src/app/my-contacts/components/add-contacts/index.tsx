@@ -12,7 +12,7 @@ import {
 import { Loader2 } from "lucide-react"
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import { ContactCategory } from "@/mocks/types";
+import { ContactCategory } from "@/types";
 import { HookFormTextInput } from "@/components/hook-form-text-input";
 import { SelectCategory } from "../select-category";
 import { addContactSchema } from "@/validations/schemas";
@@ -20,57 +20,57 @@ import { FormProvider, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 
 interface IRegisterContact {
- name: string;
- email: string;
- phone: string;
- category: ContactCategory;
+  name: string;
+  email: string;
+  phone: string;
+  category: ContactCategory;
 }
 
 export const AddContact = () => {
- const [stepModal, setStepModal] = useState(1);
- const [openModal, setOpenModal] = useState(false);
- const [loading, setLoading] = useState(false);
+  const [stepModal, setStepModal] = useState(1);
+  const [openModal, setOpenModal] = useState(false);
+  const [loading, setLoading] = useState(false);
 
- const methods = useForm<IRegisterContact>({
-  resolver: yupResolver(addContactSchema),
-  mode: "onSubmit",
-  defaultValues: {
-   name: "",
-   email: "",
-   phone: "",
-   category: ContactCategory.FRIEND,
-  },
- });
+  const methods = useForm<IRegisterContact>({
+    resolver: yupResolver(addContactSchema),
+    mode: "onSubmit",
+    defaultValues: {
+      name: "",
+      email: "",
+      phone: "",
+      category: ContactCategory.FRIEND,
+    },
+  });
 
- const handleContinue = async () => {
-  const isValid = await methods.trigger(["name", "email"]);
-  if (!isValid) return;
+  const handleContinue = async () => {
+    const isValid = await methods.trigger(["name", "email"]);
+    if (!isValid) return;
 
-  setLoading(true);
-  await new Promise((resolve) => setTimeout(resolve, 800));
-  setStepModal(2);
-  setLoading(false);
-};
-
-const handleOnSubmit = async (data: IRegisterContact) => {
-  setLoading(true);
-
-  try {
-    console.log(data);
-    toast.success("Contact created successfully!");
-    handleFinish();
-  } catch (error) {
-    toast.error("Failed to create contact.");
-  } finally {
+    setLoading(true);
+    await new Promise((resolve) => setTimeout(resolve, 800));
+    setStepModal(2);
     setLoading(false);
-  }
-};
+  };
 
- const handleFinish = () => {
-  methods.reset();
-  setStepModal(1);
-  setOpenModal(false);
- };
+  const handleOnSubmit = async (data: IRegisterContact) => {
+    setLoading(true);
+
+    try {
+      console.log(data);
+      toast.success("Contact created successfully!");
+      handleFinish();
+    } catch (error) {
+      toast.error("Failed to create contact.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleFinish = () => {
+    methods.reset();
+    setStepModal(1);
+    setOpenModal(false);
+  };
 
   const handleCancel = () => {
     methods.reset();
@@ -82,8 +82,8 @@ const handleOnSubmit = async (data: IRegisterContact) => {
     setStepModal(1);
   };
 
- return (
-  <Dialog open={openModal} onOpenChange={setOpenModal}>
+  return (
+    <Dialog open={openModal} onOpenChange={setOpenModal}>
       <DialogTrigger asChild>
         <Button variant="outline">Create Contact</Button>
       </DialogTrigger>
@@ -162,7 +162,7 @@ const handleOnSubmit = async (data: IRegisterContact) => {
                   <SelectCategory
                     value={methods.watch("category")}
                     onValueChange={(value: ContactCategory) =>
-                     methods.setValue("category", value, { shouldValidate: true })
+                      methods.setValue("category", value, { shouldValidate: true })
                     }
                   />
 
@@ -198,5 +198,5 @@ const handleOnSubmit = async (data: IRegisterContact) => {
         </FormProvider>
       </DialogContent>
     </Dialog>
- )
+  )
 }

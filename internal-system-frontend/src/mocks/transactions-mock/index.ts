@@ -1,4 +1,4 @@
-import { Transaction, TransactionCategory } from "../types";
+import { Transaction, TransactionCategory } from "@/types";
 
 const transactionsMock: Transaction[] = [
   {
