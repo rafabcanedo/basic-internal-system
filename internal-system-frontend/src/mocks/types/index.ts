@@ -11,6 +11,13 @@ export enum TransactionCategory {
  ENTERTAINMENT = "Entertainment",
 }
 
+export enum CostCategory {
+ FOOD = "Food",
+ PAYMENT = "Payment",
+ ENTERTAINMENT = "Entertainment",
+ TRAVEL = "Travel",
+}
+
 export type Contact = {
   id: number;
   name: string;
@@ -24,4 +31,12 @@ export type Transaction = {
   contactId: number;
   value: number;
   category: TransactionCategory;
+}
+
+export type Cost = {
+ id: number;
+ ContactId: number;
+ category: CostCategory;
+ value: number;
+ percent: number;
 }

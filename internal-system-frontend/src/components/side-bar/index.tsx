@@ -32,12 +32,12 @@ const data = {
           url: "/my-wallet",
         },
         {
-          title: "Add money",
-          url: "#",
+          title: "Costs",
+          url: "/costs",
         },
         {
           title: "Payments",
-          url: "payments",
+          url: "/payments",
         },
         {
           title: "My contacts",
@@ -80,7 +80,7 @@ export function SideBar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar {...props}>
       <div className="flex items-center justify-center mt-4 mb-4">
-       <Logo />
+        <Logo />
       </div>
       <SidebarHeader>
         <SearchForm />

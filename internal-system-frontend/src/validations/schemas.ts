@@ -1,6 +1,6 @@
 import * as yup from "yup";
-import { emailField, passwordField, nameField, phoneField, trimmed } from "./fields";
-import { ContactCategory } from "@/mocks/types";
+import { emailField, passwordField, nameField, phoneField, trimmed, valueField, percentField } from "./fields";
+import { ContactCategory, CostCategory } from "@/mocks/types";
 
 export const signInSchema = yup.object({
   email: trimmed(emailField()),
@@ -36,6 +36,19 @@ export const addContactSchema = yup.object({
     .mixed<ContactCategory>()
     .oneOf(
       [ContactCategory.FAMILY, ContactCategory.FRIEND, ContactCategory.WORK],
+      "Invalid category"
+    )
+    .required("Category is required"),
+});
+
+export const addCostSchema = yup.object({
+  contact: trimmed(nameField(2)),
+  value: trimmed(valueField()),
+  percent: trimmed(percentField()),
+  category: yup
+    .mixed<CostCategory>()
+    .oneOf(
+      [CostCategory.ENTERTAINMENT, CostCategory.FOOD, CostCategory.PAYMENT, CostCategory.TRAVEL],
       "Invalid category"
     )
     .required("Category is required"),

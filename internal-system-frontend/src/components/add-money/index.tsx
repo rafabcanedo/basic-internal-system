@@ -16,28 +16,28 @@ import QRCode from "react-qr-code";
 import { toast } from "sonner";
 
 export const AddMoney = () => {
- const [stepModal, setStepModal] = useState(1);
- const [amount, setAmount] = useState("");
- const [openModal, setOpenModal] = useState(false);
- const [loading, setLoading] = useState(false);
+  const [stepModal, setStepModal] = useState(1);
+  const [amount, setAmount] = useState("");
+  const [openModal, setOpenModal] = useState(false);
+  const [loading, setLoading] = useState(false);
 
- const pixCode = `00020126580014br.gov.bcb.pix0136${amount}52040000530398654${amount.padStart(
+  const pixCode = `00020126580014br.gov.bcb.pix0136${amount}52040000530398654${amount.padStart(
     10,
     "0"
   )}5802BR5925Your Name Here6009SAO PAULO`;
 
   const handleContinue = async () => {
-   if (!amount || parseFloat(amount) <= 0) return;
+    if (!amount || parseFloat(amount) <= 0) return;
 
-   setLoading(true);
-   await new Promise((resolve) => setTimeout(resolve, 1500));
-   setStepModal(2);
-   setLoading(false);
+    setLoading(true);
+    await new Promise((resolve) => setTimeout(resolve, 1500));
+    setStepModal(2);
+    setLoading(false);
   };
 
   const handleFinish = () => {
     console.log("Pagamento confirmed:", amount);
-    
+
     setStepModal(1);
     setAmount("");
     setOpenModal(false);
@@ -81,25 +81,25 @@ export const AddMoney = () => {
 
               <div className="flex flex-row gap-2">
                 <Button
-                 className="w-1/2 transition-all duration-150 ease-in-out"
-                 variant="outline"
-                 onClick={handleContinue}
-                 disabled={loading || !amount || parseFloat(amount) <= 0}
-                >
-                {loading ? (
-                <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                </>
-                ) : (
-                "Continue"
-                )}
-                </Button>
-                <Button
                   className="w-1/2"
                   variant="ghost"
                   onClick={handleCancel}
                 >
                   Cancel
+                </Button>
+                <Button
+                  className="w-1/2 transition-all duration-150 ease-in-out"
+                  variant="outline"
+                  onClick={handleContinue}
+                  disabled={loading || !amount || parseFloat(amount) <= 0}
+                >
+                  {loading ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    </>
+                  ) : (
+                    "Continue"
+                  )}
                 </Button>
               </div>
             </div>
@@ -136,8 +136,8 @@ export const AddMoney = () => {
                     size="sm"
                     variant="outline"
                     onClick={() => {
-                     navigator.clipboard.writeText(pixCode);
-                     toast.success("PIX code copied to clipboard!");
+                      navigator.clipboard.writeText(pixCode);
+                      toast.success("PIX code copied to clipboard!");
                     }}
                   >
                     Copy
