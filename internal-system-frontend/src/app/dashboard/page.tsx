@@ -4,9 +4,9 @@ import { SideBar } from "@/components/side-bar"
 import { SidebarProvider } from "@/components/ui/sidebar"
 import { User, WalletMinimal, ScanBarcode } from 'lucide-react';
 import { DashboardCards } from "./components/dashboard-cards";
-import { LastTransactions } from "./components/last-transactions";
 import { RecentContacts } from "./components/recent-contacts";
-import Reminders from "./components/reminders";
+import { RecentCosts } from "./components/recent-costs";
+import { Reminders } from "./components/reminders";
 
 export default function Dashboard() {
     return (
@@ -30,7 +30,7 @@ export default function Dashboard() {
                     </div>
 
                     <div>
-                        <LastTransactions />
+                        <RecentCosts />
                     </div>
 
                     <div>

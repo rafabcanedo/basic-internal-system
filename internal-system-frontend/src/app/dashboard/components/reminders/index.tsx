@@ -18,7 +18,7 @@ interface IReminder {
     date: Date;
 }
 
-export default function Reminders() {
+export const Reminders = () => {
     const [reminders, setReminders] = useState<IReminder[]>([]);
 
     const handleAddReminder = (reminder: Omit<IReminder, "id">) => {

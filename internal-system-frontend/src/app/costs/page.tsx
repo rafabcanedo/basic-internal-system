@@ -1,8 +1,11 @@
+"use client"
+
 import { SideBar } from "@/components/side-bar"
 import { SidebarProvider } from "@/components/ui/sidebar"
 import { AvatarCosts } from "./components/avatar-costs"
 import { Button } from "@/components/ui/button"
 import { CostsTable } from "./components/costs-table"
+import Link from "next/link"
 
 export default function Costs() {
 
@@ -16,14 +19,16 @@ export default function Costs() {
     ]
 
     return (
-        <SidebarProvider className="px-8">
+        <SidebarProvider>
             <SideBar />
-            <div className="flex flex-col">
+            <div className="flex flex-col px-8 w-full">
                 <header className="flex flex-row items-center justify-between h-12 mt-4">
                     <h1 className="font-montserrat text-xl text-zinc-600">Your costs</h1>
-                    <Button>Add Cost</Button>
+                    <Link href="/costs/create-cost">
+                        <Button variant="outline">Add Cost</Button>
+                    </Link>
                 </header>
-                <div className="grid grid-cols-6 gap-6 mt-8">
+                <div className="grid grid-cols-6 mt-8 w-1/2 mx-auto">
                     {contacts.map((contact) => (
                         <AvatarCosts key={contact.id} name={contact.name} />
                     ))}
@@ -33,6 +38,6 @@ export default function Costs() {
                     <CostsTable />
                 </div>
             </div>
-        </SidebarProvider>
+        </SidebarProvider >
     )
 }

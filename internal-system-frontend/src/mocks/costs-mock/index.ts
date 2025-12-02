@@ -6,7 +6,7 @@ const costsMock: Cost[] = [
     contactId: 1,
     category: CostCategory.FOOD,
     value: 20,
-    percent: 10
+    percent: 50
   },
   {
     id: 2,
@@ -34,7 +34,7 @@ const costsMock: Cost[] = [
     contactId: 3,
     category: CostCategory.FOOD,
     value: 80,
-    percent: 4
+    percent: 20
   },
   {
     id: 6,
@@ -48,14 +48,14 @@ const costsMock: Cost[] = [
     contactId: 1,
     category: CostCategory.TRAVEL,
     value: 250,
-    percent: 12.5
+    percent: 10
   },
   {
     id: 8,
     contactId: 2,
     category: CostCategory.FOOD,
     value: 50,
-    percent: 2.5
+    percent: 50
   }
 ]
 

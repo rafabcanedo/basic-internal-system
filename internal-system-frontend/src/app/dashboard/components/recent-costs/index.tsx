@@ -6,22 +6,22 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { transactionsMock } from "@/mocks/transactions-mock"
 import { contactsMock } from "@/mocks/contacts-mock"
 import Link from "next/link"
+import { costsMock } from "@/mocks/costs-mock"
 import { BadgeType } from "@/utils/badge-types"
 
 const LIMIT = 6
 
-export const LastTransactions = () => {
-  const limitedTransactions = transactionsMock.slice(0, LIMIT)
+export const RecentCosts = () => {
+  const limitedCosts = costsMock.slice(0, LIMIT)
 
   return (
     <div className="mt-6 mb-6">
       <div className="w-full max-w-5xl rounded-xl border border-zinc-200 bg-white shadow-sm">
         <div className="flex items-center justify-between px-6 pt-4 pb-2">
           <h2 className="font-mono text-lg font-semibold text-zinc-600">
-            Last Payments
+            Recent Costs
           </h2>
         </div>
 
@@ -31,30 +31,35 @@ export const LastTransactions = () => {
               <TableRow>
                 <TableHead className="w-[140px]">Name</TableHead>
                 <TableHead className="text-right">Value</TableHead>
+                <TableHead className="text-right">Percent</TableHead>
                 <TableHead className="text-right">Category</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {limitedTransactions.map((transaction) => {
+              {limitedCosts.map((cost) => {
                 const contact = contactsMock.find(
-                  (c) => c.id === transaction.contactId
+                  (c) => c.id === cost.contactId
                 )
 
                 return (
-                  <TableRow key={transaction.id}>
+                  <TableRow key={cost.id}>
                     <TableCell className="font-medium text-zinc-800">
                       {contact ? contact.name : "Unknown"}
                     </TableCell>
 
                     <TableCell className="text-right font-mono text-sm text-zinc-700">
-                      {transaction.value.toLocaleString("en-US", {
+                      {cost.value.toLocaleString("en-US", {
                         style: "currency",
                         currency: "USD",
                       })}
                     </TableCell>
 
+                    <TableCell className="text-right font-mono text-sm text-zinc-700">
+                      {cost.percent} %
+                    </TableCell>
+
                     <TableCell className="text-right text-sm text-zinc-500">
-                      <BadgeType type={transaction.category} />
+                      <BadgeType type={cost.category} />
                     </TableCell>
                   </TableRow>
                 )
@@ -64,7 +69,7 @@ export const LastTransactions = () => {
         </div>
 
         <div className="flex justify-end px-6 py-3 border-t border-zinc-100">
-          <Link href="/payments">
+          <Link href="/costs">
             <button
               type="button"
               className="text-sm font-medium text-zinc-600 hover:text-zinc-500 hover:underline cursor-pointer"
