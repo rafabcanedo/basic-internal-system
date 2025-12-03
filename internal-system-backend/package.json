@@ -15,6 +15,8 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@fastify/swagger": "^9.6.1",
+    "@scalar/fastify-api-reference": "^1.40.0",
     "@types/pg": "^8.15.5",
     "bcrypt": "^6.0.0",
     "dotenv": "^17.2.2",

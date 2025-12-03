@@ -7,7 +7,10 @@ import {
   validatorCompiler,
   serializerCompiler,
   type ZodTypeProvider,
+  jsonSchemaTransform,
 } from 'fastify-type-provider-zod'
+import scalarApiReference from '@scalar/fastify-api-reference'
+import fastifySwagger from '@fastify/swagger'
 
 const app = fastify({
   logger: {
@@ -20,6 +23,20 @@ const app = fastify({
     },
   },
 }).withTypeProvider<ZodTypeProvider>()
+
+app.register(fastifySwagger, {
+  openapi: {
+    info: {
+      title: 'Internal System',
+      version: '1.0.0',
+    },
+  },
+  transform: jsonSchemaTransform,
+})
+
+app.register(scalarApiReference, {
+  routePrefix: '/docs',
+})
 
 app.setValidatorCompiler(validatorCompiler)
 app.setSerializerCompiler(serializerCompiler)
