@@ -1,7 +1,7 @@
 import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod'
-import { db } from '../database/client'
+import { db } from '../../database/client'
 import z from 'zod'
-import { users } from '../database/schema'
+import { users } from '../../database/schema'
 
 export const getUsersRoute: FastifyPluginAsyncZod = async (server) => {
   server.get(
@@ -14,10 +14,9 @@ export const getUsersRoute: FastifyPluginAsyncZod = async (server) => {
           200: z.object({
             users: z.array(
               z.object({
-                id: z.uuid(),
+                id: z.string().uuid(),
                 name: z.string(),
-                email: z.string(),
-                password: z.string(),
+                email: z.string().email(),
                 phone: z.string(),
               }),
             ),

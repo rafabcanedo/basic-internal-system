@@ -1,8 +1,8 @@
 import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod'
-import { db } from '../database/client'
+import { db } from '../../database/client'
 import z from 'zod'
 import { eq } from 'drizzle-orm'
-import { users } from '../database/schema'
+import { users } from '../../database/schema'
 
 export const getUserByIdRoute: FastifyPluginAsyncZod = async (server) => {
   server.get(
@@ -12,18 +12,20 @@ export const getUserByIdRoute: FastifyPluginAsyncZod = async (server) => {
         tags: ['users'],
         summary: 'Get users by ID',
         params: z.object({
-          id: z.uuid(),
+          id: z.string().uuid(),
         }),
         response: {
           200: z.object({
             user: z.object({
-              id: z.uuid(),
+              id: z.string().uuid(),
               name: z.string(),
               email: z.string().email(),
               phone: z.string(),
             }),
           }),
-          404: z.null().describe('User not found'),
+          404: z.object({
+            error: z.string(),
+          }),
         },
       },
     },
@@ -40,11 +42,13 @@ export const getUserByIdRoute: FastifyPluginAsyncZod = async (server) => {
         .from(users)
         .where(eq(users.id, userId))
 
-      if (result.length === 0) {
-        return reply.status(404).send(null)
+      const user = result[0]
+
+      if (!user) {
+        return reply.status(404).send({ error: 'User not found.' })
       }
 
-      return { user: result[0]! }
+      return reply.send({ user })
     },
   )
 }

@@ -16,6 +16,7 @@
   "description": "",
   "dependencies": {
     "@types/pg": "^8.15.5",
+    "bcrypt": "^6.0.0",
     "dotenv": "^17.2.2",
     "drizzle-orm": "^0.44.5",
     "fastify": "^5.6.0",
@@ -27,6 +28,7 @@
   },
   "devDependencies": {
     "@rocketseat/eslint-config": "^2.2.2",
+    "@types/bcrypt": "^6.0.0",
     "@types/node": "^24.3.1",
     "drizzle-kit": "^0.31.5",
     "eslint": "^8.57.1",
