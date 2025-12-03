@@ -2,6 +2,7 @@ import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod'
 import { db } from '../../database/client'
 import z from 'zod'
 import { users } from '../../database/schema'
+import { ilike, asc, type SQL, and } from 'drizzle-orm' // 37 min
 
 export const getUsersRoute: FastifyPluginAsyncZod = async (server) => {
   server.get(
@@ -10,6 +11,12 @@ export const getUsersRoute: FastifyPluginAsyncZod = async (server) => {
       schema: {
         tags: ['users'],
         summary: 'Get all users',
+        querystring: z.object({
+          search: z.string().optional(),
+          orderBy: z.enum(['id', 'name']).optional().default('id'),
+          // pagination => offset Pagination
+          page: z.coerce.number().optional().default(1),
+        }),
         response: {
           200: z.object({
             users: z.array(
@@ -20,22 +27,39 @@ export const getUsersRoute: FastifyPluginAsyncZod = async (server) => {
                 phone: z.string(),
               }),
             ),
+            total: z.number(),
           }),
         },
       },
     },
     async (request, reply) => {
-      const result = await db
-        .select({
-          id: users.id,
-          name: users.name,
-          email: users.email,
-          password: users.password,
-          phone: users.phone,
-        })
-        .from(users)
+      const { search, orderBy, page } = request.query
 
-      return reply.send({ users: result })
+      const conditions: SQL[] = []
+
+      if (search) {
+        conditions.push(ilike(users.name, `%${search}%`))
+      }
+
+      const [result, total] = await Promise.all([
+        db
+          .select({
+            id: users.id,
+            name: users.name,
+            email: users.email,
+            password: users.password,
+            phone: users.phone,
+          })
+          .from(users)
+          .orderBy(asc(users[orderBy]))
+          .offset((page - 1) * 2)
+          .limit(10)
+          .where(and(...conditions))
+          .groupBy(users.id),
+        db.$count(users, and(...conditions)),
+      ])
+
+      return reply.send({ users: result, total })
     },
   )
 }
