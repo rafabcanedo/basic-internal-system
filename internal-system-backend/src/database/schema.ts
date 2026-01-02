@@ -27,7 +27,7 @@ export const users = pgTable('users', {
   phone: text().notNull(),
 })
 
-export const contact = pgTable('contacts', {
+export const contacts = pgTable('contacts', {
   id: uuid().primaryKey().defaultRandom(),
   userId: uuid('user_id')
     .notNull()
@@ -45,7 +45,7 @@ export const costs = pgTable('costs', {
     .references(() => users.id, { onDelete: 'cascade' }),
   contactId: uuid('contact_id')
     .notNull()
-    .references(() => contact.id, { onDelete: 'cascade' }),
+    .references(() => contacts.id, { onDelete: 'cascade' }),
   value: text().notNull(),
   category: categoryCosts().notNull(),
 })
@@ -57,7 +57,7 @@ export const transactions = pgTable('transactions', {
     .references(() => users.id, { onDelete: 'cascade' }),
   contactId: uuid('contact_id')
     .notNull()
-    .references(() => contact.id, { onDelete: 'cascade' }),
+    .references(() => contacts.id, { onDelete: 'cascade' }),
   value: text().notNull(),
   category: categoryTransaction().notNull(),
 })
@@ -89,14 +89,14 @@ export const addressesRelations = relations(addresses, ({ one }) => ({
 })) */
 
 export const usersRelations = relations(users, ({ many }) => ({
-  contacts: many(contact),
+  contacts: many(contacts),
   costs: many(costs),
   transactions: many(transactions),
 }))
 
-export const contactRelations = relations(contact, ({ one, many }) => ({
+export const contactRelations = relations(contacts, ({ one, many }) => ({
   user: one(users, {
-    fields: [contact.userId],
+    fields: [contacts.userId],
     references: [users.id],
   }),
   costs: many(costs),
@@ -108,9 +108,9 @@ export const costsRelations = relations(costs, ({ one }) => ({
     fields: [costs.userId],
     references: [users.id],
   }),
-  contact: one(contact, {
+  contact: one(contacts, {
     fields: [costs.contactId],
-    references: [contact.id],
+    references: [contacts.id],
   }),
 }))
 
@@ -119,8 +119,8 @@ export const transactionsRelations = relations(transactions, ({ one }) => ({
     fields: [transactions.userId],
     references: [users.id],
   }),
-  contact: one(contact, {
+  contact: one(contacts, {
     fields: [transactions.contactId],
-    references: [contact.id],
+    references: [contacts.id],
   }),
 }))

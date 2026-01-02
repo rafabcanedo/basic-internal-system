@@ -2,7 +2,7 @@ import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod'
 import { db } from '../../database/client'
 import z from 'zod'
 import { eq } from 'drizzle-orm'
-import { contact, costs, users } from '../../database/schema'
+import { contacts, costs, users } from '../../database/schema'
 
 export const getCostByIdRoute: FastifyPluginAsyncZod = async (server) => {
   server.get(
@@ -43,9 +43,11 @@ export const getCostByIdRoute: FastifyPluginAsyncZod = async (server) => {
           value: costs.value,
           category: costs.category,
           userName: users.name,
-          contactName: contact.name,
+          contactName: contacts.name,
         })
         .from(costs)
+        .innerJoin(users, eq(costs.userId, users.id))
+        .innerJoin(contacts, eq(costs.contactId, contacts.id))
         .where(eq(costs.id, costId))
 
       const cost = result[0]

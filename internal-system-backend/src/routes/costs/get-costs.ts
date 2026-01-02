@@ -1,7 +1,7 @@
 import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod'
 import { db } from '../../database/client'
 import z from 'zod'
-import { costs, users, contact } from '../../database/schema'
+import { costs, users, contacts } from '../../database/schema'
 import { ilike, asc, type SQL, and, eq } from 'drizzle-orm'
 
 export const getCostsRoute: FastifyPluginAsyncZod = async (server) => {
@@ -64,11 +64,11 @@ export const getCostsRoute: FastifyPluginAsyncZod = async (server) => {
             value: costs.value,
             category: costs.category,
             userName: users.name,
-            contactName: contact.name,
+            contactName: contacts.name,
           })
           .from(costs)
           .innerJoin(users, eq(costs.userId, users.id))
-          .innerJoin(contact, eq(costs.contactId, contact.id))
+          .innerJoin(contacts, eq(costs.contactId, contacts.id))
           .orderBy(asc(costs[orderBy]))
           .offset((page - 1) * pageSize)
           .limit(pageSize)

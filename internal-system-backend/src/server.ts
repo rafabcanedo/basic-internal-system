@@ -11,6 +11,12 @@ import {
 } from 'fastify-type-provider-zod'
 import scalarApiReference from '@scalar/fastify-api-reference'
 import fastifySwagger from '@fastify/swagger'
+import { getCostsRoute } from './routes/costs/get-costs'
+import { createCostRoute } from './routes/costs/create-cost'
+import { getCostByIdRoute } from './routes/costs/get-cost-by-id'
+import { getContactsRoute } from './routes/contact/get-contacts'
+import { createContactRoute } from './routes/contact/create-contact'
+import { getContactByIdRoute } from './routes/contact/get-contact-by-id'
 
 const app = fastify({
   logger: {
@@ -44,6 +50,14 @@ app.setSerializerCompiler(serializerCompiler)
 app.register(getUsersRoute)
 app.register(createUserRoute)
 app.register(getUserByIdRoute)
+
+app.register(getCostsRoute)
+app.register(createCostRoute)
+app.register(getCostByIdRoute)
+
+app.register(getContactsRoute)
+app.register(createContactRoute)
+app.register(getContactByIdRoute)
 
 app
   .listen({

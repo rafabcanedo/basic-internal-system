@@ -33,8 +33,8 @@ export const createCostRoute: FastifyPluginAsyncZod = async (server) => {
         return reply.status(404).send({ error: 'User not found' })
       }
 
-      const contactExists = await db.query.contact.findFirst({
-        where: (contact, { eq }) => eq(contact.id, contactId),
+      const contactExists = await db.query.contacts.findFirst({
+        where: (contacts, { eq }) => eq(contacts.id, contactId),
       })
 
       if (!contactExists) {
