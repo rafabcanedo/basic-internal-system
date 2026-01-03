@@ -1,5 +1,4 @@
 import type { Mock } from 'vitest'
-
 export interface DbMocks {
   insertMock: Mock
   valuesMock: Mock
@@ -21,4 +20,14 @@ export interface CreateUserPayload {
   email: string
   password: string
   phone: string
+}
+
+export type ContactCategory = 'Family' | 'Friend' | 'Work'
+
+export interface CreateContactPayload {
+  userId: string
+  name: string
+  email: string
+  phone: string
+  category: ContactCategory
 }
