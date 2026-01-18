@@ -6,6 +6,7 @@ export interface DbMocks {
 
   selectMock: Mock
   fromMock: Mock
+  innerJoinMock?: Mock // optional because we just use in get-costs
   whereMock: Mock
 
   orderByMock: Mock
@@ -30,4 +31,13 @@ export interface CreateContactPayload {
   email: string
   phone: string
   category: ContactCategory
+}
+
+export type CostCategory = 'Food' | 'Payment' | 'Entertainment' | 'Travel'
+
+export interface CreateCostPayload {
+  userId: string
+  contactId: string
+  value: string
+  category: CostCategory
 }
