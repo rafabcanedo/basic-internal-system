@@ -2,8 +2,13 @@ import { SideBar } from "@/components/side-bar"
 import { SidebarProvider } from "@/components/ui/sidebar"
 import { TableContact } from "./components/table-contacts"
 import { AddContact } from "./components/add-contacts"
+import { GetContactsResponse } from "@/lib/types/contacts"
+import { apiCall } from "@/lib/api-client"
 
-export default function MyContacts() {
+export default async function MyContacts() {
+
+    const data = await apiCall<GetContactsResponse>('/contacts')
+
     return (
         <SidebarProvider>
             <SideBar />
@@ -14,7 +19,10 @@ export default function MyContacts() {
                 </header>
 
                 <div className="mt-12">
-                    <TableContact />
+                    <TableContact
+                        contacts={data.contacts}
+                        total={data.total}
+                    />
                 </div>
             </div>
         </SidebarProvider>

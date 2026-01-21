@@ -9,7 +9,8 @@ const publicRoutes = [
 ] as const;
 
 // Route what user is redirect when user not authenticate
-const REDIRECT_WHEN_NOT_AUTHENTICATED_ROUTE = "/login";
+const REDIRECT_WHEN_NOT_AUTHENTICATED_ROUTE = "/signin";
+const REDIRECT_WHEN_AUTHENTICATED_ROUTE = "/dashboard";
 
 // Here we search if the cookie there is, but we not validate if these
 // cookie is right, in the future we will go work this.
@@ -24,26 +25,14 @@ export function middleware(request: NextRequest) {
 
   if (!authToken && !publicRoute) {
     const redirectUrl = request.nextUrl.clone();
-
     redirectUrl.pathname = REDIRECT_WHEN_NOT_AUTHENTICATED_ROUTE;
-
     return NextResponse.redirect(redirectUrl);
   }
 
-  if (authToken && publicRoute && publicRoute.whenAuthenticated == "redirect") {
+  if (authToken && publicRoute) {
     const redirectUrl = request.nextUrl.clone();
-
-    redirectUrl.pathname = "/";
-
+    redirectUrl.pathname = REDIRECT_WHEN_AUTHENTICATED_ROUTE;
     return NextResponse.redirect(redirectUrl);
-  }
-
-  if (authToken && !publicRoute) {
-    // If you want check if the JWT is expire
-    // If yes, remove the cookie and redirect the user for login route
-    // Work with refrash token => it's recomend work with refrash token in front end
-
-    return NextResponse.next();
   }
 
   return NextResponse.next();

@@ -1,7 +1,11 @@
 import { ContactCategory, CostCategory, TransactionCategory } from "@/types";
 
-interface ITypeBadge {
+interface ITypeBadgeMocks {
   type: ContactCategory | TransactionCategory | CostCategory;
+}
+
+interface ITypeBadge {
+  type: ContactCategory
 }
 
 const categoryStyles: Record<string, string> = {

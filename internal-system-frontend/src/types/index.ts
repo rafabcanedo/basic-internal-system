@@ -40,3 +40,13 @@ export type Cost = {
  value: number;
  percent: number;
 }
+
+export type GetContactsResponse = {
+  contacts: Contact[]
+  total: number
+}
+
+export type GetCostsResponse = {
+  costs: Cost[]
+  total: number
+}
