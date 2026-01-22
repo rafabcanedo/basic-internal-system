@@ -6,15 +6,19 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { contactsMock } from "@/mocks/contacts-mock"
 import Link from "next/link"
-import { costsMock } from "@/mocks/costs-mock"
 import { BadgeType } from "@/utils/badge-types"
+import { Cost } from "@/types"
 
 const LIMIT = 6
 
-export const RecentCosts = () => {
-  const limitedCosts = costsMock.slice(0, LIMIT)
+interface CostsTableProps {
+  costs: Cost[]
+  total: number
+}
+
+export const RecentCosts = ({ costs }: CostsTableProps) => {
+  const limitedCosts = costs.slice(0, LIMIT)
 
   return (
     <div className="mt-6 mb-6">
@@ -36,34 +40,28 @@ export const RecentCosts = () => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {limitedCosts.map((cost) => {
-                const contact = contactsMock.find(
-                  (c) => c.id === cost.contactId
-                )
+              {limitedCosts.map((cost) => (
+                <TableRow key={cost.id}>
+                  <TableCell className="font-medium text-zinc-800">
+                    {cost.contactName}
+                  </TableCell>
 
-                return (
-                  <TableRow key={cost.id}>
-                    <TableCell className="font-medium text-zinc-800">
-                      {contact ? contact.name : "Unknown"}
-                    </TableCell>
+                  <TableCell className="text-right font-mono text-sm text-zinc-700">
+                    {Number(cost.value).toLocaleString("en-US", {
+                      style: "currency",
+                      currency: "USD",
+                    })}
+                  </TableCell>
 
-                    <TableCell className="text-right font-mono text-sm text-zinc-700">
-                      {cost.value.toLocaleString("en-US", {
-                        style: "currency",
-                        currency: "USD",
-                      })}
-                    </TableCell>
+                  <TableCell className="text-right font-mono text-sm text-zinc-700">
+                    {cost.percent ?? "10%"}
+                  </TableCell>
 
-                    <TableCell className="text-right font-mono text-sm text-zinc-700">
-                      {cost.percent} %
-                    </TableCell>
-
-                    <TableCell className="text-right text-sm text-zinc-500">
-                      <BadgeType type={cost.category} />
-                    </TableCell>
-                  </TableRow>
-                )
-              })}
+                  <TableCell className="text-right text-sm text-zinc-500">
+                    <BadgeType type={cost.category} />
+                  </TableCell>
+                </TableRow>
+              ))}
             </TableBody>
           </Table>
         </div>

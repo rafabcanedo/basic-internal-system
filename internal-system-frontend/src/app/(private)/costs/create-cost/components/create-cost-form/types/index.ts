@@ -1,7 +1,7 @@
 import { CostCategory } from "@/types";
 
 export interface ICreateCostForm {
-    contact: string;
+    contactId: string;
     category: CostCategory;
     value: string;
     percent: string;

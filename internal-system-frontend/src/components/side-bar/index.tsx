@@ -24,7 +24,7 @@ const data = {
       items: [
         {
           title: "Home",
-          url: "/dashboard",
+          url: "/",
           isActive: true,
         },
         {

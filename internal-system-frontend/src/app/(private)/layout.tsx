@@ -8,7 +8,8 @@ import {
 import "../globals.css";
 import { ReactNode } from "react";
 import { Toaster } from "@/components/ui/sonner";
-import { Sidebar, SidebarProvider } from "@/components/ui/sidebar";
+import { SidebarProvider } from "@/components/ui/sidebar";
+import { SideBar } from "@/components/side-bar";
 
 const poppins = Poppins({
     variable: "--font-poppins",
@@ -45,22 +46,24 @@ export default function PrivateLayout({
     children: ReactNode;
 }>) {
     return (
-        <SidebarProvider>
-            <html lang="en">
-                <body
-                    className={`
+        <html lang="en">
+            <body
+                className={`
                 ${poppins.variable}
                 ${roboto.variable}
                 ${openSans.variable}
                 ${montserrat.variable}
                 antialiased
               `}
-                >
-                    <Sidebar />
-                    {children}
-                    <Toaster richColors position="bottom-center" />
-                </body>
-            </html>
-        </SidebarProvider>
+            >
+                <SidebarProvider>
+                    <SideBar />
+                    <main className="flex-1 px-8">
+                        {children}
+                    </main>
+                </SidebarProvider>
+                <Toaster richColors position="bottom-center" />
+            </body>
+        </html>
     );
 }

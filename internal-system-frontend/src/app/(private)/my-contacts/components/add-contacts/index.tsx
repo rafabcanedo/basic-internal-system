@@ -18,6 +18,7 @@ import { SelectCategory } from "../select-category";
 import { addContactSchema } from "@/validations/schemas";
 import { FormProvider, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useRouter } from "next/navigation";
 
 interface IRegisterContact {
   name: string;
@@ -30,6 +31,8 @@ export const AddContact = () => {
   const [stepModal, setStepModal] = useState(1);
   const [openModal, setOpenModal] = useState(false);
   const [loading, setLoading] = useState(false);
+
+  const router = useRouter();
 
   const methods = useForm<IRegisterContact>({
     resolver: yupResolver(addContactSchema),
@@ -53,14 +56,62 @@ export const AddContact = () => {
   };
 
   const handleOnSubmit = async (data: IRegisterContact) => {
+
+    console.log("📋 Dados completos:", data);
+    console.log("📋 Category recebida:", data.category);
+    console.log("📋 Type da category:", typeof data.category);
+    console.log("📋 Valores aceitos:", Object.values(ContactCategory));
+    console.log("📋 Comparação:", {
+      recebida: data.category,
+      aceitos: Object.values(ContactCategory),
+      match: Object.values(ContactCategory).includes(data.category),
+    });
+
     setLoading(true);
 
     try {
-      console.log(data);
+      const payload = {
+        userId: "6186997e-fb6b-4d07-9be9-6610cf6d127c", // random userID for a short time
+        name: data.name,
+        email: data.email,
+        phone: data.phone,
+        category: data.category,
+      };
+
+      // In the future, we change userId for this
+      //       const session = await getServerSession(); // your method auth
+      // userId: session.user.id
+
+      const res = await fetch('/api/contacts', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+
+      const result = await res.json();
+
+      if (!res.ok) {
+        if (res.status === 409) {
+          methods.setError("email", {
+            type: "manual",
+            message: result.error || "This email is already registered",
+          });
+          setStepModal(1);
+          toast.error("Email already exists");
+          return;
+        }
+
+        throw new Error(result.error || 'Failed to create contact');
+      }
+
       toast.success("Contact created successfully!");
       handleFinish();
+
+      router.refresh();
+
     } catch (error) {
-      toast.error("Failed to create contact.");
+      console.error('Error creating contact:', error);
+      toast.error("Failed to create contact. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -90,7 +141,7 @@ export const AddContact = () => {
 
       <DialogContent>
         <FormProvider {...methods}>
-          <form onSubmit={methods.handleSubmit(handleOnSubmit)}>
+          <form onSubmit={methods.handleSubmit(handleOnSubmit, (errors) => console.log("Erro de validação:", errors))}>
             {stepModal === 1 && (
               <>
                 <DialogHeader>

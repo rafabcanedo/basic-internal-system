@@ -6,29 +6,25 @@ export async function GET(request: NextRequest) {
     const searchParams = request.nextUrl.searchParams
     const params = new URLSearchParams(searchParams)
 
-    const res = await fetch(`${API_BASE_URL}/contacts?${params}`, {
+    const res = await fetch(`${API_BASE_URL}/costs?${params}`, {
       method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers: { 'Content-Type': 'application/json' },
+      cache: 'no-store',
     })
 
     const data = await res.json()
 
     if (!res.ok) {
       return NextResponse.json(
-        { error: data.error || 'Failed to fetch contacts' },
+        { error: data.error || 'Failed to fetch costs' },
         { status: res.status }
       )
     }
 
     return NextResponse.json(data)
   } catch (error) {
-    console.error('[GET /api/contacts] Error:', error)
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    )
+    console.error('[GET /api/costs] Error:', error)
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }
 
@@ -36,7 +32,7 @@ export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
 
-    const res = await fetch(`${API_BASE_URL}/contacts`, {
+    const res = await fetch(`${API_BASE_URL}/costs`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(body),
@@ -46,14 +42,14 @@ export async function POST(request: NextRequest) {
 
     if (!res.ok) {
       return NextResponse.json(
-        { error: data.error || 'Failed to create contact' },
+        { error: data.error || 'Failed to create cost' },
         { status: res.status }
       )
     }
 
     return NextResponse.json(data, { status: 201 })
   } catch (error) {
-    console.error('[POST /api/contacts] Error:', error)
+    console.error('[POST /api/costs] Error:', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }

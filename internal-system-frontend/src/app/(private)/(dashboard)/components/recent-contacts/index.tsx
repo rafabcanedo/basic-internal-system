@@ -6,14 +6,20 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table"
-import { contactsMock } from "@/mocks/contacts-mock"
+import { Contact } from "@/types"
 import { BadgeType } from "@/utils/badge-types"
 import Link from "next/link"
 
 const LIMIT = 6
 
-export const RecentContacts = () => {
-    const limitedContacts = contactsMock.slice(0, LIMIT)
+interface RecentContactsProps {
+    contacts: Contact[]
+    total: number
+}
+
+export const RecentContacts = ({ contacts }: RecentContactsProps) => {
+
+    const limitedContacts = contacts.slice(0, LIMIT)
 
     return (
         <div className="mt-6 mb-6">

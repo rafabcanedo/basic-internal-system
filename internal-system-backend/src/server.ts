@@ -1,5 +1,6 @@
 import fastify from 'fastify'
 import { env } from './env'
+import fastifyCors from '@fastify/cors'
 import { getUsersRoute } from './routes/users/get-users'
 import { createUserRoute } from './routes/users/create-user'
 import { getUserByIdRoute } from './routes/users/get-user-by-id'
@@ -29,6 +30,11 @@ const app = fastify({
     },
   },
 }).withTypeProvider<ZodTypeProvider>()
+
+app.register(fastifyCors, {
+  origin: 'http://localhost:3000',
+  credentials: true,
+})
 
 app.register(fastifySwagger, {
   openapi: {

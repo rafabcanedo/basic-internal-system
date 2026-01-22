@@ -19,7 +19,7 @@ export enum CostCategory {
 }
 
 export type Contact = {
-  id: number;
+  id: string;
   name: string;
   email: string;
   phone: string;
@@ -27,18 +27,21 @@ export type Contact = {
 }
 
 export type Transaction = {
-  id: number;
+  id: string;
   contactId: number;
-  value: number;
+  value: string;
   category: TransactionCategory;
 }
 
 export type Cost = {
- id: number;
- contactId: number;
- category: CostCategory;
- value: number;
- percent: number;
+  id: string;
+  userId: string;
+  contactId: string;
+  value: string;
+  category: CostCategory;
+  userName: string;
+  contactName: string;
+  percent?: number;
 }
 
 export type GetContactsResponse = {

@@ -11,28 +11,20 @@ import { Loader2 } from "lucide-react"
 import { HookFormSelect } from "@/components/hook-form-select"
 import { ICreateCostForm } from "./types"
 import { useRouter } from "next/navigation"
+import { toast } from "sonner"
 
-const mockContacts = [
-    { label: "John Doe", value: "john" },
-    { label: "Jane Doe", value: "jane" },
-    { label: "Alice", value: "alice" },
-]
+interface CreateCostFormProps {
+    contacts: { label: string; value: string }[]
+}
 
-const mockCategories = [
-    { label: "Food", value: "food" },
-    { label: "Payment", value: "payment" },
-    { label: "Entertainment", value: "entertainment" },
-    { label: "Travel", value: "travel" },
-]
-
-export default function CreateCostForm() {
+export default function CreateCostForm({ contacts }: CreateCostFormProps) {
     const router = useRouter()
 
     const methods = useForm<ICreateCostForm>({
         resolver: yupResolver(addCostSchema),
         mode: "onSubmit",
         defaultValues: {
-            contact: "",
+            contactId: "",
             category: "" as CostCategory,
             value: "",
             percent: "",
@@ -44,21 +36,53 @@ export default function CreateCostForm() {
         formState: { isSubmitting },
     } = methods
 
-    const handleOnSubmit: SubmitHandler<ICreateCostForm> = (data) => {
-        const payload = {
-            ...data,
-            value: Number(data.value),
-            percent: Number(data.percent),
-        }
+    const handleOnSubmit: SubmitHandler<ICreateCostForm> = async (data) => {
+        try {
+            const payload = {
+                userId: "6186997e-fb6b-4d07-9be9-6610cf6d127c", // same example mock
+                contactId: data.contactId,
+                value: data.value,
+                category: data.category,
+            }
 
-        console.log("form raw:", data)
-        console.log("payload to backend:", payload)
+            const res = await fetch('/api/costs', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload),
+            })
+
+            const result = await res.json()
+
+            if (!res.ok) {
+                if (res.status === 404) {
+                    toast.error(result.error || "User or Contact not found")
+                    return
+                }
+
+                throw new Error(result.error || 'Failed to create cost')
+            }
+
+            toast.success("Cost created successfully!")
+            router.push("/costs")
+            router.refresh()
+
+        } catch (error) {
+            console.error('Error creating cost:', error)
+            toast.error("Failed to create cost. Please try again.")
+        }
     }
 
     const handleCancel = () => {
         methods.reset()
         router.push("/costs")
     }
+
+    const categoryOptions = [
+        { label: "Food", value: CostCategory.FOOD },
+        { label: "Payment", value: CostCategory.PAYMENT },
+        { label: "Entertainment", value: CostCategory.ENTERTAINMENT },
+        { label: "Travel", value: CostCategory.TRAVEL },
+    ]
 
     return (
         <div className="flex items-center justify-center min-h-screen">
@@ -70,11 +94,11 @@ export default function CreateCostForm() {
                         </CardHeader>
                         <CardContent className="space-y-4">
                             <HookFormSelect
-                                name="contact"
+                                name="contactId"
                                 label="Contact"
                                 placeholder="Select a contact"
                                 groupLabel="Contacts"
-                                options={mockContacts}
+                                options={contacts}
                             />
 
                             <HookFormSelect
@@ -82,14 +106,14 @@ export default function CreateCostForm() {
                                 label="Category"
                                 placeholder="Select a category"
                                 groupLabel="Categories"
-                                options={mockCategories}
+                                options={categoryOptions}
                             />
 
                             <HookFormTextInput
                                 title="Value"
                                 name="value"
-                                label="100"
-                                type="number"
+                                label="100.50"
+                                type="text"
                             />
 
                             <HookFormTextInput
@@ -117,6 +141,7 @@ export default function CreateCostForm() {
                                 {isSubmitting ? (
                                     <>
                                         <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                        Creating...
                                     </>
                                 ) : (
                                     "Add Cost"

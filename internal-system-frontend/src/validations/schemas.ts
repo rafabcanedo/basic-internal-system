@@ -34,22 +34,22 @@ export const addContactSchema = yup.object({
   phone: trimmed(phoneField()),
   category: yup
     .mixed<ContactCategory>()
-    .oneOf(
-      [ContactCategory.FAMILY, ContactCategory.FRIEND, ContactCategory.WORK],
-      "Invalid category"
-    )
+    .oneOf(Object.values(ContactCategory), "Invalid category")
     .required("Category is required"),
 });
 
 export const addCostSchema = yup.object({
-  contact: trimmed(nameField(2)),
+  contactId: trimmed(yup.string().uuid("Invalid contact ID").required("Contact is required")),
   value: trimmed(valueField()),
-  percent: trimmed(percentField()),
+  percent: yup
+    .string()
+    .required("Percent is required")
+    .test("is-percent", "Invalid percentage. Must be between 0 and 100", (val) => {
+      const num = Number(val);
+      return !isNaN(num) && num >= 0 && num <= 100;
+    }),
   category: yup
     .mixed<CostCategory>()
-    .oneOf(
-      [CostCategory.ENTERTAINMENT, CostCategory.FOOD, CostCategory.PAYMENT, CostCategory.TRAVEL],
-      "Invalid category"
-    )
+    .oneOf(Object.values(CostCategory), "Invalid category")
     .required("Category is required"),
 });
