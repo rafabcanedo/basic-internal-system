@@ -2,10 +2,21 @@ import { TableContact } from "./components/table-contacts"
 import { AddContact } from "./components/add-contacts"
 import { GetContactsResponse } from "@/lib/types/contacts"
 import { apiCall } from "@/lib/api-client"
+import { Suspense } from "react"
+import { ApiLoading } from "@/components/loading/api-loading"
 
-export default async function MyContacts() {
-
+async function ContactsData() {
     const data = await apiCall<GetContactsResponse>('/contacts')
+
+    return (
+        <TableContact
+            contacts={data.contacts}
+            total={data.total}
+        />
+    )
+}
+
+export default function MyContacts() {
 
     return (
         <div className="px-8 w-full">
@@ -15,10 +26,9 @@ export default async function MyContacts() {
             </header>
 
             <div className="mt-12">
-                <TableContact
-                    contacts={data.contacts}
-                    total={data.total}
-                />
+                <Suspense fallback={<ApiLoading type="card" rows={5} />}>
+                    <ContactsData />
+                </Suspense>
             </div>
         </div>
     )
