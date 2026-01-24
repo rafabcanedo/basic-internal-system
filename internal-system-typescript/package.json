@@ -1,5 +1,5 @@
 {
-  "name": "internal-system-backend",
+  "name": "internal-system-typescript",
   "type": "module",
   "version": "1.0.0",
   "main": "index.js",
