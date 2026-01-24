@@ -1,3 +1,4 @@
+import { API_BASE_URL } from '../constants'
 import { ApiError, ForbiddenError, InternalServerError, NetworkError, NotFoundError, ServiceUnavailableError, UnauthorizedError, ValidationError } from '../errors/api.error'
 
 function getBaseUrl() {
@@ -6,7 +7,7 @@ function getBaseUrl() {
   const envUrl = process.env.NEXT_PUBLIC_APP_URL || process.env.APP_URL
   if (envUrl) return envUrl.replace(/\/$/, '')
 
-  return 'http://localhost:3000'
+  return API_BASE_URL
 }
 
 export async function apiCall<T>(

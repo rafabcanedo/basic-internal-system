@@ -53,3 +53,5 @@ export type GetCostsResponse = {
   costs: Cost[]
   total: number
 }
+
+export type CreateContactInput = Omit<Contact, 'id'>

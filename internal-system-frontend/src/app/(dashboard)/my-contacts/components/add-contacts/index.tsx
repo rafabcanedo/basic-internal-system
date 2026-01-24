@@ -57,16 +57,6 @@ export const AddContact = () => {
 
   const handleOnSubmit = async (data: IRegisterContact) => {
 
-    console.log("📋 Dados completos:", data);
-    console.log("📋 Category recebida:", data.category);
-    console.log("📋 Type da category:", typeof data.category);
-    console.log("📋 Valores aceitos:", Object.values(ContactCategory));
-    console.log("📋 Comparação:", {
-      recebida: data.category,
-      aceitos: Object.values(ContactCategory),
-      match: Object.values(ContactCategory).includes(data.category),
-    });
-
     setLoading(true);
 
     try {
