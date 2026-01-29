@@ -1,11 +1,7 @@
 import { MiddlewareConfig, NextRequest, NextResponse } from "next/server";
 
 // Work with public routes, definition routes which the user can access without authentication
-const publicRoutes = [
-  "/signin",
-  "/signup",
-  "/forgot-your-password",
-] as const;
+const publicRoutes = ["/signin", "/signup", "/forgot-your-password"] as const;
 
 // Route where user is redirected when user is not authenticated
 const REDIRECT_WHEN_NOT_AUTHENTICATED_ROUTE = "/signin";
@@ -17,9 +13,9 @@ const REDIRECT_WHEN_AUTHENTICATED_ROUTE = "/dashboard";
 export function middleware(request: NextRequest) {
   const path = request.nextUrl.pathname;
   const authToken = request.cookies.get("token");
-  
+
   // Check if the route is public
-  const isPublicRoute = publicRoutes.some(route => path.startsWith(route));
+  const isPublicRoute = publicRoutes.some((route) => path.startsWith(route));
 
   // User NOT authenticated
   if (!authToken) {

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -8,10 +8,10 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog"
-import { InitialHelper } from "@/components/initial-helper"
-import { BanknoteArrowUp, Loader2 } from "lucide-react"
-import { Button } from "../ui/button"
+} from "@/components/ui/dialog";
+import { InitialHelper } from "@/components/initial-helper";
+import { BanknoteArrowUp, Loader2 } from "lucide-react";
+import { Button } from "../ui/button";
 import QRCode from "react-qr-code";
 import { toast } from "sonner";
 
@@ -20,6 +20,26 @@ export const AddMoney = () => {
   const [amount, setAmount] = useState("");
   const [openModal, setOpenModal] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [timer, setTimer] = useState(60);
+
+  useEffect(() => {
+    if (stepModal === 2) {
+      setTimer(60);
+      const interval = setInterval(() => {
+        setTimer((prev) => {
+          if (prev <= 1) {
+            clearInterval(interval);
+            toast.error("Tempo expirado! Gere um novo PIX.");
+            setStepModal(1);
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+
+      return () => clearInterval(interval);
+    }
+  }, [stepModal]);
 
   const pixCode = `00020126580014br.gov.bcb.pix0136${amount}52040000530398654${amount.padStart(
     10,
@@ -52,10 +72,7 @@ export const AddMoney = () => {
   return (
     <Dialog open={openModal} onOpenChange={setOpenModal}>
       <DialogTrigger>
-        <InitialHelper
-          name="Add money"
-          icon={BanknoteArrowUp}
-        />
+        <InitialHelper name="Add money" icon={BanknoteArrowUp} />
       </DialogTrigger>
 
       <DialogContent>
@@ -121,6 +138,10 @@ export const AddMoney = () => {
                 <QRCode value={pixCode} size={200} />
               </div>
 
+              <p className="text-sm text-green-600 font-medium">
+                Time remaining: {timer}s
+              </p>
+
               <div className="w-full">
                 <p className="text-xs text-zinc-500 mb-1">
                   Or copy the QR code:
@@ -137,7 +158,7 @@ export const AddMoney = () => {
                     variant="outline"
                     onClick={() => {
                       navigator.clipboard.writeText(pixCode);
-                      toast.success("PIX code copied to clipboard!");
+                      toast.success("Time expired! Generate a new PIX.");
                     }}
                   >
                     Copy
@@ -157,5 +178,5 @@ export const AddMoney = () => {
         )}
       </DialogContent>
     </Dialog>
-  )
-}
+  );
+};
