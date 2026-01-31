@@ -14,6 +14,7 @@ export default function MyWallet() {
       <div className="flex flex-row gap-8 mt-8">
         <WalletCharts config={chartConfigs.investments} />
         <WalletCharts config={chartConfigs.business} />
+        <WalletCharts config={chartConfigs.spending} />
       </div>
     </div>
   );

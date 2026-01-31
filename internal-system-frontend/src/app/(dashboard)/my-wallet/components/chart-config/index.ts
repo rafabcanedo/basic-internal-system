@@ -12,7 +12,7 @@ export const chartConfigs: Record<string, ChartConfig> = {
     footer: {
       trend: "up",
       trendValue: 12.5,
-      subtitle: "Total portfolio value for Q1 2024",
+      subtitle: "Total portfolio value for last month",
     },
   },
 
@@ -29,7 +29,25 @@ export const chartConfigs: Record<string, ChartConfig> = {
     footer: {
       trend: "up",
       trendValue: 3.2,
-      subtitle: "Total business expenses for the last 6 months",
+      subtitle: "Total business expenses for the last month",
+    },
+  },
+
+  spending: {
+    title: "Personal Spending",
+    description: "Monthly expense breakdown",
+    data: [
+      { name: "Food & Dining", value: 800, color: "#3b82f6" },
+      { name: "Transportation", value: 400, color: "#06b6d4" },
+      { name: "Entertainment", value: 300, color: "#10b981" },
+      { name: "Shopping", value: 500, color: "#2dd4bf" },
+      { name: "Bills & Utilities", value: 600, color: "#60a5fa" },
+      { name: "Others", value: 200, color: "#94a3b8" },
+    ],
+    footer: {
+      trend: "down",
+      trendValue: 5.8,
+      subtitle: "Total personal spending for last month",
     },
   },
 };
