@@ -1,6 +1,6 @@
-import * as React from "react"
+import * as React from "react";
 
-import { SearchForm } from "@/components/search-form"
+import { SearchForm } from "@/components/search-form";
 import {
   Sidebar,
   SidebarContent,
@@ -12,8 +12,8 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarRail,
-} from "@/components/ui/sidebar"
-import { Logo } from "../logo"
+} from "@/components/ui/sidebar";
+import { Logo } from "../logo";
 
 const data = {
   versions: ["1.0.1", "1.1.0-alpha", "2.0.0-beta1"],
@@ -24,7 +24,7 @@ const data = {
       items: [
         {
           title: "Home",
-          url: "/",
+          url: "/dashboard",
           isActive: true,
         },
         {
@@ -74,7 +74,7 @@ const data = {
       ],
     },
   ],
-}
+};
 
 export function SideBar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
@@ -105,5 +105,5 @@ export function SideBar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarContent>
       <SidebarRail />
     </Sidebar>
-  )
+  );
 }
