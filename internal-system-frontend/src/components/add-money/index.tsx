@@ -16,21 +16,28 @@ import QRCode from "react-qr-code";
 import { toast } from "sonner";
 
 export const AddMoney = () => {
-  const [stepModal, setStepModal] = useState(1);
   const [amount, setAmount] = useState("");
-  const [openModal, setOpenModal] = useState(false);
-  const [loading, setLoading] = useState(false);
+
+  const [modal, setModal] = useState({
+    isOpen: false,
+    step: 1,
+    isLoading: false,
+  });
+
   const [timer, setTimer] = useState(60);
 
+  const isTimerActive = modal.step === 2 && modal.isOpen;
+  const isTimerVisible = modal.step === 2;
+
   useEffect(() => {
-    if (stepModal === 2) {
+    if (isTimerActive) {
       setTimer(60);
       const interval = setInterval(() => {
         setTimer((prev) => {
           if (prev <= 1) {
             clearInterval(interval);
-            toast.error("Tempo expirado! Gere um novo PIX.");
-            setStepModal(1);
+            toast.error("Time expired! Generate a new PIX.");
+            setModal((prev) => ({ ...prev, step: 1 }));
             return 0;
           }
           return prev - 1;
@@ -39,7 +46,7 @@ export const AddMoney = () => {
 
       return () => clearInterval(interval);
     }
-  }, [stepModal]);
+  }, [isTimerActive]);
 
   const pixCode = `00020126580014br.gov.bcb.pix0136${amount}52040000530398654${amount.padStart(
     10,
@@ -49,34 +56,44 @@ export const AddMoney = () => {
   const handleContinue = async () => {
     if (!amount || parseFloat(amount) <= 0) return;
 
-    setLoading(true);
+    setModal((prev) => ({ ...prev, isLoading: true }));
     await new Promise((resolve) => setTimeout(resolve, 1500));
-    setStepModal(2);
-    setLoading(false);
+    setModal((prev) => ({ ...prev, step: 2, isLoading: false }));
   };
 
-  const handleFinish = () => {
-    console.log("Pagamento confirmed:", amount);
+  const handleFinish = async () => {
+    setModal({ isOpen: false, step: 1, isLoading: true });
 
-    setStepModal(1);
+    toast.success(`Successfully added $${amount} to your wallet!`);
+
+    await new Promise((resolve) => setTimeout(resolve, 1500));
+
+    setModal({
+      isOpen: false,
+      step: 1,
+      isLoading: false,
+    });
+
     setAmount("");
-    setOpenModal(false);
   };
 
   const handleCancel = () => {
-    setStepModal(1);
+    setModal({ isOpen: false, step: 1, isLoading: false });
+
     setAmount("");
-    setOpenModal(false);
   };
 
   return (
-    <Dialog open={openModal} onOpenChange={setOpenModal}>
+    <Dialog
+      open={modal.isOpen}
+      onOpenChange={(isOpen) => setModal((prev) => ({ ...prev, isOpen }))}
+    >
       <DialogTrigger>
         <InitialHelper name="Add money" icon={BanknoteArrowUp} />
       </DialogTrigger>
 
       <DialogContent>
-        {stepModal === 1 && (
+        {modal.step === 1 && (
           <>
             <DialogHeader>
               <DialogTitle>Add Money</DialogTitle>
@@ -108,9 +125,11 @@ export const AddMoney = () => {
                   className="w-1/2 transition-all duration-150 ease-in-out"
                   variant="outline"
                   onClick={handleContinue}
-                  disabled={loading || !amount || parseFloat(amount) <= 0}
+                  disabled={
+                    modal.isLoading || !amount || parseFloat(amount) <= 0
+                  }
                 >
-                  {loading ? (
+                  {modal.isLoading ? (
                     <>
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                     </>
@@ -123,7 +142,7 @@ export const AddMoney = () => {
           </>
         )}
 
-        {stepModal === 2 && (
+        {modal.step === 2 && (
           <>
             <DialogHeader>
               <DialogTitle>Scan your QR Code</DialogTitle>
@@ -138,9 +157,23 @@ export const AddMoney = () => {
                 <QRCode value={pixCode} size={200} />
               </div>
 
-              <p className="text-sm text-green-600 font-medium">
-                Time remaining: {timer}s
-              </p>
+              {isTimerVisible &&
+                (() => {
+                  const isExpiring = timer <= 10;
+                  const colorClass = isExpiring
+                    ? "bg-red-50 border-red-200 text-red-600"
+                    : "bg-green-50 border-green-200 text-green-600";
+
+                  return (
+                    <div
+                      className={`flex items-center gap-2 px-4 py-2 rounded-lg border transition-all duration-300 ${colorClass}`}
+                    >
+                      <p className="text-sm font-medium">
+                        Time remaining: {timer}s
+                      </p>
+                    </div>
+                  );
+                })()}
 
               <div className="w-full">
                 <p className="text-xs text-zinc-500 mb-1">
@@ -158,7 +191,7 @@ export const AddMoney = () => {
                     variant="outline"
                     onClick={() => {
                       navigator.clipboard.writeText(pixCode);
-                      toast.success("Time expired! Generate a new PIX.");
+                      toast.success("copied successfully!");
                     }}
                   >
                     Copy
@@ -170,8 +203,13 @@ export const AddMoney = () => {
                 className="w-full"
                 variant="outline"
                 onClick={handleFinish}
+                disabled={modal.isLoading}
               >
-                Finish
+                {modal.isLoading ? (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                ) : (
+                  "Finish"
+                )}
               </Button>
             </div>
           </>

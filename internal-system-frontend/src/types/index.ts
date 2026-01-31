@@ -5,17 +5,17 @@ export enum ContactCategory {
 }
 
 export enum TransactionCategory {
- FOOD = "Food",
- PAYMENT = "Payment",
- TRANSFER = "Transfer",
- ENTERTAINMENT = "Entertainment",
+  FOOD = "Food",
+  PAYMENT = "Payment",
+  TRANSFER = "Transfer",
+  ENTERTAINMENT = "Entertainment",
 }
 
 export enum CostCategory {
- FOOD = "Food",
- PAYMENT = "Payment",
- ENTERTAINMENT = "Entertainment",
- TRAVEL = "Travel",
+  FOOD = "Food",
+  PAYMENT = "Payment",
+  ENTERTAINMENT = "Entertainment",
+  TRAVEL = "Travel",
 }
 
 export type Contact = {
@@ -24,14 +24,15 @@ export type Contact = {
   email: string;
   phone: string;
   category: ContactCategory;
-}
+};
 
 export type Transaction = {
   id: string;
-  contactId: number;
+  contactId?: number;
+  place: string;
   value: string;
   category: TransactionCategory;
-}
+};
 
 export type Cost = {
   id: string;
@@ -42,16 +43,16 @@ export type Cost = {
   userName: string;
   contactName: string;
   percent?: number;
-}
+};
 
 export type GetContactsResponse = {
-  contacts: Contact[]
-  total: number
-}
+  contacts: Contact[];
+  total: number;
+};
 
 export type GetCostsResponse = {
-  costs: Cost[]
-  total: number
-}
+  costs: Cost[];
+  total: number;
+};
 
-export type CreateContactInput = Omit<Contact, 'id'>
+export type CreateContactInput = Omit<Contact, "id">;
