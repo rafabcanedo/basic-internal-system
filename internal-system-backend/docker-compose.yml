@@ -14,5 +14,10 @@ services:
       - "3333:3333"
     environment:
       - DB_HOST=db
+      - DB_PORT=5432
+      - DB_USER=postgres
+      - DB_PASSWORD=postgres
+      - DB_NAME=internal
+      - DB_SSLMODE=disable
     depends_on:
       - db
