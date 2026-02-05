@@ -1,0 +1,37 @@
+import { apiCall } from '@/lib/api-client'
+import type { 
+  GetContactsResponse, 
+  Contact, 
+  CreateContactInput 
+} from '@/types'
+
+export const ContactsService = {
+  getAll: async (params?: URLSearchParams) => {
+    const query = params ? `?${params.toString()}` : ''
+    return apiCall<GetContactsResponse>(`/contacts${query}`)
+  },
+
+  getById: async (id: string) => {
+    return apiCall<Contact>(`/contacts/${id}`)
+  },
+
+  create: async (data: CreateContactInput) => {
+    return apiCall<Contact>('/contacts', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    })
+  },
+
+  update: async (id: string, data: Partial<CreateContactInput>) => {
+    return apiCall<Contact>(`/contacts/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(data),
+    })
+  },
+
+  delete: async (id: string) => {
+    return apiCall<void>(`/contacts/${id}`, {
+      method: 'DELETE',
+    })
+  },
+}
