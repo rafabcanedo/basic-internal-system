@@ -9,14 +9,15 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { BadgeType } from "@/utils/badge-types"
-import type { Contact } from "@/types"
+import { useContactsQuery } from "@/hooks/queries/use-contacts-query"
 
-interface TableContactProps {
-  contacts: Contact[]
-  total: number
-}
+export const TableContact = () => {
 
-export const TableContact = ({ contacts, total }: TableContactProps) => {
+  const { data } = useContactsQuery()
+
+  const contacts = data?.contacts ?? []
+  const total = data?.total ?? 0
+
   return (
     <div className="w-full flex justify-center mt-6 mb-6">
       <div className="w-full max-w-7xl rounded-xl border bg-white shadow-sm">

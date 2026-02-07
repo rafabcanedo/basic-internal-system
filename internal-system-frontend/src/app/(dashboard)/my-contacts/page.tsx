@@ -1,17 +1,17 @@
-import { TableContact } from "./components/table-contacts";
 import { AddContact } from "./components/add-contacts";
-import { apiCall } from "@/lib/api-client";
-import { Suspense } from "react";
-import { ApiLoading } from "@/components/loading/api-loading";
-import { GetContactsResponse } from "@/types";
+import { ContactsService } from "@/services";
+import { dehydrate, HydrationBoundary, QueryClient } from "@tanstack/react-query";
+import { TableContact } from "./components/table-contacts";
 
-async function ContactsData() {
-  const data = await apiCall<GetContactsResponse>("/contacts");
+export default async function MyContacts() {
 
-  return <TableContact contacts={data.contacts} total={data.total} />;
-}
+  const queryClient = new QueryClient()
 
-export default function MyContacts() {
+  await queryClient.prefetchQuery({
+    queryKey: ['contacts'],
+    queryFn: () => ContactsService.getAll(),
+  })
+
   return (
     <div className="px-8 w-full">
       <header className="flex flex-row items-center justify-between h-12 mt-4">
@@ -22,9 +22,9 @@ export default function MyContacts() {
       </header>
 
       <div className="mt-12">
-        <Suspense fallback={<ApiLoading type="card" rows={5} />}>
-          <ContactsData />
-        </Suspense>
+        <HydrationBoundary state={dehydrate(queryClient)}>
+          <TableContact />
+        </HydrationBoundary>
       </div>
     </div>
   );

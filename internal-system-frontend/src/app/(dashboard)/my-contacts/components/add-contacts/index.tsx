@@ -10,7 +10,6 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog"
 import { Loader2 } from "lucide-react"
-import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { ContactCategory } from "@/types";
 import { HookFormTextInput } from "@/components/hook-form-text-input";
@@ -18,7 +17,8 @@ import { SelectCategory } from "../select-category";
 import { addContactSchema } from "@/validations/schemas";
 import { FormProvider, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useRouter } from "next/navigation";
+import { ApiError } from "@/lib/errors/api.error";
+import { useCreateContact } from "@/hooks/mutations/use-contacts-mutations";
 
 interface IRegisterContact {
   name: string;
@@ -30,9 +30,9 @@ interface IRegisterContact {
 export const AddContact = () => {
   const [stepModal, setStepModal] = useState(1);
   const [openModal, setOpenModal] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [isValidating, setIsValidating] = useState(false);
 
-  const router = useRouter();
+  const { mutateAsync: createContact, isPending } = useCreateContact();
 
   const methods = useForm<IRegisterContact>({
     resolver: yupResolver(addContactSchema),
@@ -46,64 +46,43 @@ export const AddContact = () => {
   });
 
   const handleContinue = async () => {
+    setIsValidating(true);
     const isValid = await methods.trigger(["name", "email"]);
-    if (!isValid) return;
 
-    setLoading(true);
+    if (!isValid) {
+      setIsValidating(false);
+      return;
+    }
+
     await new Promise((resolve) => setTimeout(resolve, 800));
     setStepModal(2);
-    setLoading(false);
+    setIsValidating(false);
   };
 
   const handleOnSubmit = async (data: IRegisterContact) => {
 
-    setLoading(true);
-
     try {
       const payload = {
         userId: "6186997e-fb6b-4d07-9be9-6610cf6d127c", // random userID for a short time
-        name: data.name,
-        email: data.email,
-        phone: data.phone,
-        category: data.category,
+        ...data,
       };
+
+      await createContact(payload);
+
+      handleFinish();
 
       // In the future, we change userId for this
       //       const session = await getServerSession(); // your method auth
       // userId: session.user.id
 
-      const res = await fetch('/api/contacts', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-      });
-
-      const result = await res.json();
-
-      if (!res.ok) {
-        if (res.status === 409) {
-          methods.setError("email", {
-            type: "manual",
-            message: result.error || "This email is already registered",
-          });
-          setStepModal(1);
-          toast.error("Email already exists");
-          return;
-        }
-
-        throw new Error(result.error || 'Failed to create contact');
-      }
-
-      toast.success("Contact created successfully!");
-      handleFinish();
-
-      router.refresh();
-
     } catch (error) {
-      console.error('Error creating contact:', error);
-      toast.error("Failed to create contact. Please try again.");
-    } finally {
-      setLoading(false);
+      if (error instanceof ApiError && error.status === 409) {
+        methods.setError("email", {
+          type: "manual",
+          message: "This email is already registered",
+        });
+        setStepModal(1);
+      }
     }
   };
 
@@ -168,12 +147,11 @@ export const AddContact = () => {
                       className="w-1/2"
                       type="button"
                       onClick={handleContinue}
-                      disabled={loading}
+                      disabled={isValidating || isPending}
                     >
-                      {loading ? (
+                      {isValidating ? (
                         <>
                           <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                          Loading...
                         </>
                       ) : (
                         "Continue"
@@ -213,16 +191,16 @@ export const AddContact = () => {
                       variant="outline"
                       type="button"
                       onClick={handleBack}
-                      disabled={loading}
+                      disabled={isPending}
                     >
                       Back
                     </Button>
                     <Button
                       className="w-2/3"
                       type="submit"
-                      disabled={loading}
+                      disabled={isPending}
                     >
-                      {loading ? (
+                      {isPending ? (
                         <>
                           <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                           Creating...
