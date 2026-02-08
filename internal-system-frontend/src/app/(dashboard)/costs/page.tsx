@@ -2,41 +2,30 @@ import { AvatarCosts } from "./components/avatar-costs";
 import { Button } from "@/components/ui/button";
 import { CostsTable } from "./components/costs-table";
 import Link from "next/link";
-import { GetCostsResponse } from "@/types";
-import { apiCall } from "@/lib/api-client";
-import { Suspense } from "react";
-import { ApiLoading } from "@/components/loading/api-loading";
+import {
+  dehydrate,
+  HydrationBoundary,
+  QueryClient,
+} from "@tanstack/react-query";
+import { CostsService } from "@/services";
 
-async function CostsData() {
-  const data = await apiCall<GetCostsResponse>("/costs");
+export default async function Costs() {
+  const queryClient = new QueryClient();
+
+  const data = await queryClient.fetchQuery({
+    queryKey: ["costs"],
+    queryFn: () => CostsService.getAll(),
+  });
 
   const uniqueContacts = Array.from(
     new Map(
       data.costs.map((cost) => [
         cost.contactId,
         { id: cost.contactId, name: cost.contactName },
-      ])
-    ).values()
+      ]),
+    ).values(),
   );
 
-  return (
-    <>
-      {uniqueContacts.length > 0 && (
-        <div className="grid grid-cols-6 gap-y-4 mt-8 w-1/2 mx-auto">
-          {uniqueContacts.map((contact) => (
-            <AvatarCosts key={contact.id} name={contact.name} />
-          ))}
-        </div>
-      )}
-
-      <div className="mt-12">
-        <CostsTable costs={data.costs} total={data.total} />
-      </div>
-    </>
-  );
-}
-
-export default function Costs() {
   return (
     <div className="flex flex-col px-8 w-full">
       <header className="flex flex-row items-center justify-between h-12 mt-4">
@@ -46,9 +35,19 @@ export default function Costs() {
         </Link>
       </header>
 
-      <Suspense fallback={<ApiLoading type="table" rows={8} columns={5} />}>
-        <CostsData />
-      </Suspense>
+      {uniqueContacts.length > 0 && (
+        <div className="grid grid-cols-6 gap-y-4 mt-8 w-1/2 mx-auto">
+          {uniqueContacts.map((contact) => (
+            <AvatarCosts key={contact.id} name={contact.name} />
+          ))}
+        </div>
+      )}
+
+      <div className="mt-12">
+        <HydrationBoundary state={dehydrate(queryClient)}>
+          <CostsTable />
+        </HydrationBoundary>
+      </div>
     </div>
   );
 }
