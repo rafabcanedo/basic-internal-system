@@ -8,11 +8,11 @@ const REDIRECT_WHEN_NOT_AUTHENTICATED_ROUTE = "/signin";
 // Route where user is redirected when user is authenticated
 const REDIRECT_WHEN_AUTHENTICATED_ROUTE = "/dashboard";
 
-// Here we search if the cookie is there, but we do not validate if this
-// cookie is right, in the future we will work on this.
+// Here we search if the access_token cookie exists, but we do not validate
+// the JWT signature. The real validation happens in the Fastify backend.
 export function middleware(request: NextRequest) {
   const path = request.nextUrl.pathname;
-  const authToken = request.cookies.get("token");
+  const authToken = request.cookies.get("access_token");
 
   // Check if the route is public
   const isPublicRoute = publicRoutes.some((route) => path.startsWith(route));
