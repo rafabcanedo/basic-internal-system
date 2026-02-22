@@ -12,12 +12,16 @@ import {
 } from 'fastify-type-provider-zod'
 import scalarApiReference from '@scalar/fastify-api-reference'
 import fastifySwagger from '@fastify/swagger'
+import fastifyCookie from '@fastify/cookie'
+import fastifyJwt from '@fastify/jwt'
+import type { FastifyRequest, FastifyReply } from 'fastify'
 import { getCostsRoute } from './routes/costs/get-costs'
 import { createCostRoute } from './routes/costs/create-cost'
 import { getCostByIdRoute } from './routes/costs/get-cost-by-id'
 import { getContactsRoute } from './routes/contact/get-contacts'
 import { createContactRoute } from './routes/contact/create-contact'
 import { getContactByIdRoute } from './routes/contact/get-contact-by-id'
+import { authRoutes } from './routes/auth'
 
 const app = fastify({
   logger: {
@@ -30,6 +34,29 @@ const app = fastify({
     },
   },
 }).withTypeProvider<ZodTypeProvider>()
+
+app.register(fastifyCookie, {
+  secret: 'COOKIE_SECRET',
+})
+
+app.register(fastifyJwt, {
+  secret: 'JWT_SECRET',
+  cookie: {
+    cookieName: 'access_token',
+    signed: false,
+  },
+})
+
+app.decorate(
+  'authenticate',
+  async (request: FastifyRequest, reply: FastifyReply) => {
+    try {
+      await request.jwtVerify()
+    } catch (err) {
+      reply.status(401).send({ message: 'Unauthorized' })
+    }
+  },
+)
 
 app.register(fastifyCors, {
   origin: 'http://localhost:3000',
@@ -56,6 +83,8 @@ app.setSerializerCompiler(serializerCompiler)
 app.register(getUsersRoute)
 app.register(createUserRoute)
 app.register(getUserByIdRoute)
+
+app.register(authRoutes)
 
 app.register(getCostsRoute)
 app.register(createCostRoute)

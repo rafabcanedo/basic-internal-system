@@ -1,5 +1,5 @@
 import { relations } from 'drizzle-orm'
-import { pgTable, uuid, text, pgEnum } from 'drizzle-orm/pg-core'
+import { pgTable, uuid, text, pgEnum, timestamp } from 'drizzle-orm/pg-core'
 
 export const categoryContact = pgEnum('category_contact', [
   'Family',
@@ -62,6 +62,16 @@ export const transactions = pgTable('transactions', {
   category: categoryTransaction().notNull(),
 })
 
+export const refreshTokens = pgTable('refresh_tokens', {
+  id: uuid().primaryKey().defaultRandom(),
+  userId: uuid('user_id')
+    .notNull()
+    .references(() => users.id, { onDelete: 'cascade' }),
+  hashedToken: text('hashed_token').notNull().unique(),
+  expiresAt: timestamp('expires_at').notNull(),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+})
+
 /* export const addresses = pgTable('addresses', {
   id: uuid().primaryKey().defaultRandom(),
   userId: uuid('user_id')
@@ -92,6 +102,7 @@ export const usersRelations = relations(users, ({ many }) => ({
   contacts: many(contacts),
   costs: many(costs),
   transactions: many(transactions),
+  refreshTokens: many(refreshTokens),
 }))
 
 export const contactRelations = relations(contacts, ({ one, many }) => ({
@@ -122,5 +133,12 @@ export const transactionsRelations = relations(transactions, ({ one }) => ({
   contact: one(contacts, {
     fields: [transactions.contactId],
     references: [contacts.id],
+  }),
+}))
+
+export const refreshTokensRelations = relations(refreshTokens, ({ one }) => ({
+  user: one(users, {
+    fields: [refreshTokens.userId],
+    references: [users.id],
   }),
 }))
