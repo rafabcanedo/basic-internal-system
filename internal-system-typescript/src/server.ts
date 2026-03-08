@@ -58,6 +58,24 @@ app.decorate(
   },
 )
 
+app.addHook('onRequest', async (request, reply) => {
+  const publicRoutes = [
+    '/auth/login',
+    '/auth/refresh',
+    '/auth/logout',
+    '/users',
+    '/docs',
+  ]
+
+  const isPublicRoute = publicRoutes.some((route) =>
+    request.url.startsWith(route),
+  )
+
+  if (!isPublicRoute) {
+    await app.authenticate(request, reply)
+  }
+})
+
 app.register(fastifyCors, {
   origin: 'http://localhost:3000',
   credentials: true,

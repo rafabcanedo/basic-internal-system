@@ -25,6 +25,7 @@ export async function apiCall<T>(
       },
       ...options,
       cache: 'no-store',
+      credentials: 'include',
     })
 
     const text = await res.text()

@@ -62,12 +62,7 @@ export const AddContact = () => {
   const handleOnSubmit = async (data: IRegisterContact) => {
 
     try {
-      const payload = {
-        userId: "6186997e-fb6b-4d07-9be9-6610cf6d127c", // random userID for a short time
-        ...data,
-      };
-
-      await createContact(payload);
+      await createContact(data);
 
       handleFinish();
 
