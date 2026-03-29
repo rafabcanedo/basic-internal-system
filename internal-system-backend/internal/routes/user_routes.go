@@ -7,10 +7,11 @@ import (
 )
 
 func UserRoutes(router *gin.Engine, ctrl *controller.UserController) {
+	router.POST("/users", ctrl.CreateUser)
+
 	users := router.Group("/users")
 	users.Use(auth.Middleware())
 	{
-		users.POST("", ctrl.CreateUser)
 		users.GET("", ctrl.FindAllUsers)
 		users.GET("/:id", ctrl.FindUserByID)
 		users.PUT("/:id", ctrl.UpdateUser)

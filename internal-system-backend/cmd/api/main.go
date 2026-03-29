@@ -6,6 +6,7 @@ import (
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	"github.com/joho/godotenv"
 	"github.com/rafabcanedo/basic-internal-system/internal-system-backend/internal/configuration/database"
 	"github.com/rafabcanedo/basic-internal-system/internal-system-backend/internal/controller"
 	"github.com/rafabcanedo/basic-internal-system/internal-system-backend/internal/model/repository"
@@ -14,6 +15,10 @@ import (
 )
 
 func main() {
+	if err := godotenv.Load(); err != nil {
+		log.Println("No .env file found, using environment variables")
+	}
+
 	db, err := database.InitPostgres()
 	if err != nil {
 		log.Fatalf("error initializing postgres: %v", err)

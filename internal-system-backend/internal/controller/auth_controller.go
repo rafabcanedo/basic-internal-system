@@ -79,6 +79,7 @@ func (ac *AuthController) Login(c *gin.Context) {
 			ID:    user.GetID(),
 			Name:  user.GetName(),
 			Email: user.GetEmail(),
+			Phone: user.GetPhone(),
 		},
 	})
 }
