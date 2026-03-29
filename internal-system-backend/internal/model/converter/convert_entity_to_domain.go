@@ -18,3 +18,14 @@ func ConvertEntityToDomain(
 
 	return domain
 }
+
+func ConvertContactEntityToDomain(e entity.ContactEntity) domains.ContactDomainInterface {
+	return domains.NewContactDomainWithID(
+		e.ID.String(),
+		e.OwnerID.String(),
+		e.Name,
+		e.Email,
+		e.Phone,
+		string(e.Category),
+	)
+}

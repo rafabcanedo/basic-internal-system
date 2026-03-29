@@ -9,7 +9,6 @@ type UsersEntity struct {
 	Password string `gorm:"type:varchar(60);not null"`
 	Phone string `gorm:"type:varchar(20);not null"`
 
-	Contacts []ContactsEntity `gorm:"many2many:user_contacts;"`
-	Costs        []CostEntity        `gorm:"foreignKey:UserID"`
-	Transactions []TransactionsEntity `gorm:"foreignKey:UserID"`
+	Contacts []ContactEntity `gorm:"foreignKey:OwnerID"`
+	Costs    []CostEntity    `gorm:"foreignKey:UserID"`
 }

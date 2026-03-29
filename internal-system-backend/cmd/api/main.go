@@ -31,11 +31,14 @@ func main() {
 
 	userRepo := repository.NewUserRepository(db)
 	authRepo := repository.NewAuthRepository(db)
+	contactRepo := repository.NewContactRepository(db)
 
 	userSvc := service.NewUserService(userRepo)
+	contactSvc := service.NewContactService(contactRepo)
 
 	userCtrl := controller.NewUserController(userSvc)
 	authCtrl := controller.NewAuthController(userSvc, authRepo)
+	contactCtrl := controller.NewContactController(contactSvc)
 
 	router := gin.Default()
 
@@ -56,6 +59,7 @@ func main() {
 
 	routes.AuthRoutes(router, authCtrl)
 	routes.UserRoutes(router, userCtrl)
+	routes.ContactRoutes(router, contactCtrl)
 
 	port := ":3333"
 	log.Printf("Server running on %s", port)

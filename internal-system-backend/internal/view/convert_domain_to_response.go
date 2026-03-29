@@ -18,9 +18,30 @@ func ConvertDomainToResponse(
 
 func ConvertDomainListToResponse(usersDomain []domains.UserDomainInterface) []response.UserResponse {
 	usersResponse := make([]response.UserResponse, len(usersDomain))
-	
+
 	for i, user := range usersDomain {
 		usersResponse[i] = ConvertDomainToResponse(user)
 	}
 	return usersResponse
+}
+
+func ConvertContactDomainToResponse(
+	contactDomain domains.ContactDomainInterface,
+) response.ContactResponse {
+	return response.ContactResponse{
+		ID:       contactDomain.GetID(),
+		Name:     contactDomain.GetName(),
+		Email:    contactDomain.GetEmail(),
+		Phone:    contactDomain.GetPhone(),
+		Category: contactDomain.GetCategory(),
+	}
+}
+
+func ConvertContactDomainListToResponse(contacts []domains.ContactDomainInterface) []response.ContactResponse {
+	contactsResponse := make([]response.ContactResponse, len(contacts))
+
+	for i, contact := range contacts {
+		contactsResponse[i] = ConvertContactDomainToResponse(contact)
+	}
+	return contactsResponse
 }

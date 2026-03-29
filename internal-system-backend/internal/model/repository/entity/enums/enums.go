@@ -1,27 +1,28 @@
 package enums
 
-type ContactsCategory string
+type ContactCategory string
 
 const (
-    ContactCategoryFamily ContactsCategory = "Family"
-    ContactCategoryFriend ContactsCategory = "Friend"
-    ContactCategoryWork   ContactsCategory = "Work"
+	ContactCategoryFamily ContactCategory = "Family"
+	ContactCategoryFriend ContactCategory = "Friend"
+	ContactCategoryWork   ContactCategory = "Work"
 )
 
-type CostsCategory string
+type CostCategory string
 
 const (
-	CostsCategoryFood      CostsCategory = "Food"
-	CostsCategoryPayment CostsCategory = "Payment"
-	CostsCategoryEntertainment    CostsCategory = "Entertainment"
-	CostsCategoryTravel CostsCategory = "Travel"
+	CostCategoryFood          CostCategory = "Food"
+	CostCategoryPayment       CostCategory = "Payment"
+	CostCategoryEntertainment CostCategory = "Entertainment"
+	CostCategoryTravel        CostCategory = "Travel"
 )
 
-type TransactionsCategory string
+type GroupCategory string
 
 const (
-	TransactionsCategoryFood     TransactionsCategory = "Food"
-	TransactionCategoryPayment TransactionsCategory = "Payment"
-	TransactionCategoryTransfer TransactionsCategory = "Transfer"
-	TransactionCategoryEntertainment    TransactionsCategory = "Entertainment"
+	GroupCategoryDinner        GroupCategory = "Dinner"
+	GroupCategoryLunch         GroupCategory = "Lunch"
+	GroupCategoryEntertainment GroupCategory = "Entertainment"
+	GroupCategoryTravel        GroupCategory = "Travel"
+	GroupCategoryOthers        GroupCategory = "Others"
 )

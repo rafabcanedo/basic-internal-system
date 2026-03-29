@@ -7,14 +7,19 @@ import (
 )
 
 func UserRoutes(router *gin.Engine, ctrl *controller.UserController) {
-	router.POST("/users", ctrl.CreateUser)
+	router.POST("/user", ctrl.CreateUser)
 
-	users := router.Group("/users")
-	users.Use(auth.Middleware())
-	{
-		users.GET("", ctrl.FindAllUsers)
-		users.GET("/:id", ctrl.FindUserByID)
-		users.PUT("/:id", ctrl.UpdateUser)
-		users.DELETE("/:id", ctrl.DeleteUser)
-	}
+    user := router.Group("/user")
+    user.Use(auth.Middleware())
+    {
+        user.GET("/:id", ctrl.FindUserByID)
+        user.PUT("/:id", ctrl.UpdateUser)
+        user.DELETE("/:id", ctrl.DeleteUser)
+    }
+
+    users := router.Group("/users")
+    users.Use(auth.Middleware())
+    {
+        users.GET("", ctrl.FindAllUsers)
+    }
 }
