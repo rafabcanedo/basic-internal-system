@@ -15,4 +15,7 @@ type UserDomainInterface interface {
 
 	GetPhone() string
 	SetPhone(phone string)
+
+	EncryptPassword() error
+    ComparePassword(candidate string) error
 }
