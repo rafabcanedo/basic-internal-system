@@ -31,6 +31,7 @@ func RunMigrations() error {
 
 	err = gormDB.AutoMigrate(
 		&entity.UsersEntity{},
+		&entity.RefreshTokenEntity{},
 	)
 	if err != nil {
 		return fmt.Errorf("error running migrations: %w", err)

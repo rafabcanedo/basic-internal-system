@@ -4,6 +4,7 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/rafabcanedo/basic-internal-system/internal-system-backend/internal/configuration/database"
 	"github.com/rafabcanedo/basic-internal-system/internal-system-backend/internal/controller"
@@ -24,10 +25,21 @@ func main() {
 	}
 
 	userRepo := repository.NewUserRepository(db)
+	authRepo := repository.NewAuthRepository(db)
+
 	userSvc := service.NewUserService(userRepo)
+
 	userCtrl := controller.NewUserController(userSvc)
+	authCtrl := controller.NewAuthController(userSvc, authRepo)
 
 	router := gin.Default()
+
+	router.Use(cors.New(cors.Config{
+		AllowOrigins:     []string{"http://localhost:3000"},
+		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowHeaders:     []string{"Origin", "Content-Type", "Accept"},
+		AllowCredentials: true,
+	}))
 
 	router.GET("/health", func(c *gin.Context) {
 		if err := db.Ping(); err != nil {
@@ -37,6 +49,7 @@ func main() {
 		c.JSON(http.StatusOK, gin.H{"status": "ok"})
 	})
 
+	routes.AuthRoutes(router, authCtrl)
 	routes.UserRoutes(router, userCtrl)
 
 	port := ":3333"
