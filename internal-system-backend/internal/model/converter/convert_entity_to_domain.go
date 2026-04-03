@@ -30,6 +30,26 @@ func ConvertContactEntityToDomain(e entity.ContactEntity) domains.ContactDomainI
 	)
 }
 
+func ConvertCostEntityToDomain(e entity.CostEntity) domains.CostDomainInterface {
+	groupID := ""
+	if e.GroupID != nil {
+		groupID = e.GroupID.String()
+	}
+
+	return domains.NewCostDomainWithID(
+		e.ID.String(),
+		e.UserID.String(),
+		groupID,
+		e.CostName,
+		string(e.Category),
+		e.TotalValue,
+		e.OwnerPercentage,
+		e.CreatedAt,
+		e.UpdatedAt,
+		nil,
+	)
+}
+
 func ConvertGroupEntityToDomain(e entity.GroupEntity) domains.GroupDomainInterface {
 	return domains.NewGroupDomainWithID(
 		e.ID.String(),

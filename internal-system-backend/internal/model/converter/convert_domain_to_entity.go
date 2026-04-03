@@ -49,6 +49,36 @@ func ConvertContactDomainToEntity(domain domains.ContactDomainInterface) *entity
 	}
 }
 
+func ConvertCostDomainToEntity(domain domains.CostDomainInterface) *entity.CostEntity {
+	id := domain.GetID()
+	userID := domain.GetUserID()
+	groupID := domain.GetGroupID()
+
+	var costID, userUUID uuid.UUID
+	if id != "" {
+		costID = uuid.MustParse(id)
+	}
+	if userID != "" {
+		userUUID = uuid.MustParse(userID)
+	}
+
+	var groupUUID *uuid.UUID
+	if groupID != "" {
+		parsed := uuid.MustParse(groupID)
+		groupUUID = &parsed
+	}
+
+	return &entity.CostEntity{
+		ID:              costID,
+		UserID:          userUUID,
+		GroupID:         groupUUID,
+		CostName:        domain.GetCostName(),
+		TotalValue:      domain.GetTotalValue(),
+		OwnerPercentage: domain.GetOwnerPercentage(),
+		Category:        enums.CostCategory(domain.GetCategory()),
+	}
+}
+
 func ConvertGroupDomainToEntity(domain domains.GroupDomainInterface) *entity.GroupEntity {
 	id := domain.GetID()
 	ownerID := domain.GetOwnerID()

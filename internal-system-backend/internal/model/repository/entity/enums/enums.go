@@ -11,10 +11,11 @@ const (
 type CostCategory string
 
 const (
-	CostCategoryFood          CostCategory = "Food"
-	CostCategoryPayment       CostCategory = "Payment"
+	CostCategoryDinner        CostCategory = "Dinner"
+	CostCategoryLunch         CostCategory = "Lunch"
 	CostCategoryEntertainment CostCategory = "Entertainment"
 	CostCategoryTravel        CostCategory = "Travel"
+	CostCategoryOthers        CostCategory = "Others"
 )
 
 type GroupCategory string

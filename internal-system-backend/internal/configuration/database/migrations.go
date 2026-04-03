@@ -35,6 +35,8 @@ func RunMigrations() error {
 		&entity.ContactEntity{},
 		&entity.GroupEntity{},
 		&entity.GroupMemberEntity{},
+		&entity.CostEntity{},
+		&entity.CostSplitEntity{},
 	)
 	if err != nil {
 		return fmt.Errorf("error running migrations: %w", err)

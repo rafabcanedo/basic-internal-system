@@ -46,6 +46,59 @@ func ConvertContactDomainListToResponse(contacts []domains.ContactDomainInterfac
 	return contactsResponse
 }
 
+func ConvertCostDomainToResponse(domain domains.CostDomainInterface) response.CostResponse {
+	return response.CostResponse{
+		ID:              domain.GetID(),
+		CostName:        domain.GetCostName(),
+		TotalValue:      domain.GetTotalValue(),
+		OwnerPercentage: domain.GetOwnerPercentage(),
+		OwnerValue:      domain.GetTotalValue() * domain.GetOwnerPercentage() / 100,
+		Category:        domain.GetCategory(),
+		GroupID:         domain.GetGroupID(),
+		GroupName:       domain.GetGroupName(),
+		SplitCount:      domain.GetSplitCount(),
+		CreatedAt:       domain.GetCreatedAt(),
+	}
+}
+
+func ConvertCostDomainListToResponse(costs []domains.CostDomainInterface) []response.CostResponse {
+	costsResponse := make([]response.CostResponse, len(costs))
+
+	for i, cost := range costs {
+		costsResponse[i] = ConvertCostDomainToResponse(cost)
+	}
+	return costsResponse
+}
+
+func ConvertCostDomainToDetailResponse(domain domains.CostDomainInterface) response.CostDetailResponse {
+	splits := make([]response.SplitResponse, len(domain.GetSplits()))
+
+	for i, s := range domain.GetSplits() {
+		splits[i] = response.SplitResponse{
+			ID:          s.ID,
+			ContactID:   s.ContactID,
+			ContactName: s.ContactName,
+			Value:       s.Value,
+			Percentage:  s.Percentage,
+		}
+	}
+
+	return response.CostDetailResponse{
+		ID:              domain.GetID(),
+		CostName:        domain.GetCostName(),
+		TotalValue:      domain.GetTotalValue(),
+		OwnerPercentage: domain.GetOwnerPercentage(),
+		OwnerValue:      domain.GetTotalValue() * domain.GetOwnerPercentage() / 100,
+		Category:        domain.GetCategory(),
+		GroupID:         domain.GetGroupID(),
+		GroupName:       domain.GetGroupName(),
+		SplitCount:      domain.GetSplitCount(),
+		CreatedAt:       domain.GetCreatedAt(),
+		UpdatedAt:       domain.GetUpdatedAt(),
+		Splits:          splits,
+	}
+}
+
 func ConvertGroupDomainToResponse(domain domains.GroupDomainInterface) response.GroupResponse {
 	return response.GroupResponse{
 		ID:        domain.GetID(),
