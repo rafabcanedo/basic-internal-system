@@ -8,6 +8,7 @@ import {
 import "../globals.css";
 import { ReactNode } from "react";
 import { Toaster } from "@/components/ui/sonner";
+import { ReactQueryProvider } from "@/lib/react-query";
 
 const poppins = Poppins({
     variable: "--font-poppins",
@@ -54,8 +55,10 @@ export default function PublicLayout({
                 antialiased
               `}
             >
-                {children}
-                <Toaster richColors position="bottom-center" />
+                <ReactQueryProvider>
+                    {children}
+                    <Toaster richColors position="bottom-center" />
+                </ReactQueryProvider>
             </body>
         </html>
     );

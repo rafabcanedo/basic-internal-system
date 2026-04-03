@@ -160,3 +160,25 @@ func (ac *AuthController) Logout(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{"message": "Logged out successfully"})
 }
+
+func (ac *AuthController) GetProfile(c *gin.Context) {
+	userID := c.GetString("userID")
+	if userID == "" {
+		restErr := rest_errors.NewUnauthorizedRequestError("user identification missing")
+		c.JSON(restErr.Code, restErr)
+		return
+	}
+
+	user, restErr := ac.userService.FindByID(userID)
+	if restErr != nil {
+		c.JSON(restErr.Code, restErr)
+		return
+	}
+
+	c.JSON(http.StatusOK, response.UserResponse{
+		ID:    user.GetID(),
+		Name:  user.GetName(),
+		Email: user.GetEmail(),
+		Phone: user.GetPhone(),
+	})
+}

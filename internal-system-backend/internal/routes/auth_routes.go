@@ -3,6 +3,7 @@ package routes
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/rafabcanedo/basic-internal-system/internal-system-backend/internal/controller"
+	"github.com/rafabcanedo/basic-internal-system/internal-system-backend/internal/middleware"
 )
 
 func AuthRoutes(router *gin.Engine, ctrl *controller.AuthController) {
@@ -11,5 +12,7 @@ func AuthRoutes(router *gin.Engine, ctrl *controller.AuthController) {
 		authGroup.POST("/login", ctrl.Login)
 		authGroup.POST("/refresh", ctrl.Refresh)
 		authGroup.POST("/logout", ctrl.Logout)
+
+		authGroup.GET("/profile", middleware.AuthMiddleware(), ctrl.GetProfile)
 	}
 }
