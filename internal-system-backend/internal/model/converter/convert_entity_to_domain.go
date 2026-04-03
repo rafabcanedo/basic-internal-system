@@ -29,3 +29,15 @@ func ConvertContactEntityToDomain(e entity.ContactEntity) domains.ContactDomainI
 		string(e.Category),
 	)
 }
+
+func ConvertGroupEntityToDomain(e entity.GroupEntity) domains.GroupDomainInterface {
+	return domains.NewGroupDomainWithID(
+		e.ID.String(),
+		e.OwnerID.String(),
+		e.Name,
+		string(e.Category),
+		e.CreatedAt,
+		e.UpdatedAt,
+		nil,
+	)
+}

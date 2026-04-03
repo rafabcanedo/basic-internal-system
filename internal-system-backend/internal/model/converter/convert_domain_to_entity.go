@@ -48,3 +48,23 @@ func ConvertContactDomainToEntity(domain domains.ContactDomainInterface) *entity
 		Category: enums.ContactCategory(domain.GetCategory()),
 	}
 }
+
+func ConvertGroupDomainToEntity(domain domains.GroupDomainInterface) *entity.GroupEntity {
+	id := domain.GetID()
+	ownerID := domain.GetOwnerID()
+
+	var groupID, ownerUUID uuid.UUID
+	if id != "" {
+		groupID = uuid.MustParse(id)
+	}
+	if ownerID != "" {
+		ownerUUID = uuid.MustParse(ownerID)
+	}
+
+	return &entity.GroupEntity{
+		ID:       groupID,
+		OwnerID:  ownerUUID,
+		Name:     domain.GetName(),
+		Category: enums.GroupCategory(domain.GetCategory()),
+	}
+}
