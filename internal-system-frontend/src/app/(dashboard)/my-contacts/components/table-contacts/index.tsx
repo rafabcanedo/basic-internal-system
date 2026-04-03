@@ -9,7 +9,7 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { BadgeType } from "@/utils/badge-types"
-import { useContactsQuery } from "@/hooks/queries/use-contacts-query"
+import { useContactsQuery } from "@/hooks/queries/use-contact-query"
 
 export const TableContact = () => {
 

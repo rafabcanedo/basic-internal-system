@@ -1,67 +1,66 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { API_BASE_URL } from '../constants'
+import { API_BASE_URL } from '../../constants'
 
-export async function GET(request: NextRequest) {
+export async function GET(
+  request: NextRequest,
+  { params }: { params: { id: string } }
+) {
   try {
-    const searchParams = request.nextUrl.searchParams
-    const params = new URLSearchParams(searchParams)
-
+    const { id } = params
     const accessToken = request.cookies.get('access_token')?.value
 
-    const res = await fetch(`${API_BASE_URL}/contacts?${params}`, {
+    const res = await fetch(`${API_BASE_URL}/group/${id}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
         ...(accessToken ? { Cookie: `access_token=${accessToken}` } : {}),
       },
+      cache: 'no-store',
     })
 
     const data = await res.json()
 
     if (!res.ok) {
       return NextResponse.json(
-        { error: data.error || 'Failed to fetch contacts' },
+        { error: data.error || 'Failed to fetch group' },
         { status: res.status }
       )
     }
 
     return NextResponse.json(data)
   } catch (error) {
-    console.error('[GET /api/contacts] Error:', error)
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    )
+    console.error('[GET /api/groups/:id] Error:', error)
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }
 
-export async function POST(request: NextRequest) {
+export async function DELETE(
+  request: NextRequest,
+  { params }: { params: { id: string } }
+) {
   try {
-    const body = await request.json()
-
+    const { id } = params
     const accessToken = request.cookies.get('access_token')?.value
 
-    const res = await fetch(`${API_BASE_URL}/contact`, {
-      method: 'POST',
+    const res = await fetch(`${API_BASE_URL}/group/${id}`, {
+      method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
         ...(accessToken ? { Cookie: `access_token=${accessToken}` } : {}),
       },
-      body: JSON.stringify(body),
     })
 
-    const data = await res.json()
-
     if (!res.ok) {
+      const data = await res.json()
       return NextResponse.json(
-        { error: data.error || 'Failed to create contact' },
+        { error: data.error || 'Failed to delete group' },
         { status: res.status }
       )
     }
 
-    return NextResponse.json(data, { status: 201 })
+    return NextResponse.json({ message: 'group deleted successfully' })
   } catch (error) {
-    console.error('[POST /api/contacts] Error:', error)
+    console.error('[DELETE /api/groups/:id] Error:', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }

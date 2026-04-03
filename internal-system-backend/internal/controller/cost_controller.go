@@ -65,6 +65,33 @@ func (cc *CostController) FindCostByID(c *gin.Context) {
 	c.JSON(http.StatusOK, view.ConvertCostDomainToDetailResponse(cost))
 }
 
+func (cc *CostController) UpdateCost(c *gin.Context) {
+	id := c.Param("id")
+	userID := c.GetString("userID")
+
+	var req request.UpdateCostRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		restErr := validation.ValidateCostError(err)
+		c.JSON(restErr.Code, restErr)
+		return
+	}
+
+	ownerPercentage := 0.0
+	if req.OwnerPercentage != nil {
+		ownerPercentage = *req.OwnerPercentage
+	}
+
+	domain := domains.NewCostDomain(userID, "", req.CostName, req.Category, req.TotalValue, ownerPercentage)
+
+	updated, restErr := cc.service.Update(id, userID, domain)
+	if restErr != nil {
+		c.JSON(restErr.Code, restErr)
+		return
+	}
+
+	c.JSON(http.StatusOK, view.ConvertCostDomainToDetailResponse(updated))
+}
+
 func (cc *CostController) DeleteCost(c *gin.Context) {
 	id := c.Param("id")
 	userID := c.GetString("userID")

@@ -28,10 +28,10 @@ Database         PostgreSQL (raw SQL via database/sql + pgx driver)
 | Domain | `internal/model/domains/cost_domain_interface.go` | Contract for cost data |
 | Converter | `internal/model/converter/convert_domain_to_entity.go` | Add CostDomain → CostEntity |
 | Converter | `internal/model/converter/convert_entity_to_domain.go` | Add CostEntity → CostDomain |
-| Repository | `internal/model/repository/cost_repository_impl.go` | Raw SQL CRUD + split creation in transaction |
-| Service | `internal/model/service/cost_service_impl.go` | Business logic, ownership checks, split calculation, returns RestErrors |
+| Repository | `internal/model/repository/cost_repository_impl.go` | Raw SQL CRUD + split creation/recalculation in transaction |
+| Service | `internal/model/service/cost_service_impl.go` | Business logic, ownership checks, split calculation/recalculation, returns RestErrors |
 | Controller | `internal/controller/cost_controller.go` | HTTP handlers for cost endpoints |
-| Request DTO | `internal/view/request/cost_request.go` | CreateCostRequest |
+| Request DTO | `internal/view/request/cost_request.go` | CreateCostRequest, UpdateCostRequest |
 | Response DTO | `internal/view/response/cost_response.go` | CostResponse (list), CostDetailResponse (with splits) |
 | View | `internal/view/convert_domain_to_response.go` | Add CostDomain → CostResponse / CostDetailResponse |
 | Validation | `internal/configuration/validation/validate_cost.go` | ValidateCostError |
@@ -73,6 +73,7 @@ Database         PostgreSQL (raw SQL via database/sql + pgx driver)
 
 ```
 Create(domain CostDomainInterface, memberIDs []string) (CostDomainInterface, error)
+Update(id string, domain CostDomainInterface) (CostDomainInterface, error)
 FindAll(ownerID string) ([]CostDomainInterface, error)
 FindByID(id string) (CostDomainInterface, error)
 Delete(id string) error
@@ -81,6 +82,7 @@ GetGroupName(groupID string) (string, error)
 ```
 
 - `Create` uses a DB transaction: inserts cost_entity first, then cost_split_entities for each member
+- `Update` uses a DB transaction: updates cost_entities row, then recalculates and updates all cost_split_entities rows if any exist; calls `FindByID` to return the updated detail
 - `FindAll` uses a LEFT JOIN on group_entities to return groupName, and a COUNT subquery for splitCount
 - `FindByID` uses LEFT JOINs on cost_split_entities + contact_entities to return splits inline
 
@@ -106,9 +108,20 @@ else:
 
 ---
 
+## Update Recalculation Logic (Repository Layer)
+
+```
+if splitCount > 0:
+    memberPercentage = round((100 - ownerPercentage) / splitCount, 2)
+    memberValue = round(totalValue * memberPercentage / 100, 2)
+    UPDATE cost_split_entities SET value = memberValue, percentage = memberPercentage WHERE cost_id = id
+```
+
+---
+
 ## Key Technical Decisions
 
-**Immutability** — No `PUT /cost/:id` endpoint. Costs cannot be edited after creation.
+**Mutable scalar fields only** — `PUT /cost/:id` allows updating `costName`, `totalValue`, `category`, and `ownerPercentage`. The `groupId` cannot be changed — changing the group would require deleting and recreating splits which is better handled by delete + recreate.
 
 **Owner isolation** — Every query filters by `user_id` extracted from the JWT. A user can never read or modify another user's costs.
 

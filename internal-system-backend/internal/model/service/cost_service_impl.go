@@ -12,6 +12,7 @@ import (
 
 type CostService interface {
 	Create(domain domains.CostDomainInterface, ownerPercentage *float64) (domains.CostDomainInterface, *rest_errors.RestErrors)
+	Update(id, userID string, domain domains.CostDomainInterface) (domains.CostDomainInterface, *rest_errors.RestErrors)
 	FindAll(userID string) ([]domains.CostDomainInterface, *rest_errors.RestErrors)
 	FindByID(id, userID string) (domains.CostDomainInterface, *rest_errors.RestErrors)
 	Delete(id, userID string) *rest_errors.RestErrors
@@ -56,6 +57,29 @@ func (s *costService) Create(domain domains.CostDomainInterface, ownerPercentage
 	}
 
 	return created, nil
+}
+
+func (s *costService) Update(id, userID string, domain domains.CostDomainInterface) (domains.CostDomainInterface, *rest_errors.RestErrors) {
+	existing, err := s.repo.FindByID(id)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return nil, rest_errors.NewNotFoundError("cost not found")
+		}
+		logger.Error("error finding cost for update", err)
+		return nil, rest_errors.NewInternalServerError("error updating cost")
+	}
+
+	if existing.GetUserID() != userID {
+		return nil, rest_errors.NewForbiddenError("access denied")
+	}
+
+	updated, err := s.repo.Update(id, domain)
+	if err != nil {
+		logger.Error("error updating cost", err)
+		return nil, rest_errors.NewInternalServerError("error updating cost")
+	}
+
+	return updated, nil
 }
 
 func (s *costService) FindAll(userID string) ([]domains.CostDomainInterface, *rest_errors.RestErrors) {

@@ -18,7 +18,7 @@ import { addContactSchema } from "@/validations/schemas";
 import { FormProvider, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { ApiError } from "@/lib/errors/api.error";
-import { useCreateContact } from "@/hooks/mutations/use-contacts-mutations";
+import { useCreateContact } from "@/hooks/mutations/use-contact-mutations";
 
 interface IRegisterContact {
   name: string;

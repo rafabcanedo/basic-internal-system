@@ -39,7 +39,7 @@ export async function POST(request: NextRequest) {
 
     const accessToken = request.cookies.get('access_token')?.value
 
-    const res = await fetch(`${API_BASE_URL}/costs`, {
+    const res = await fetch(`${API_BASE_URL}/cost`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

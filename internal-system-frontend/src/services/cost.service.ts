@@ -1,7 +1,5 @@
 import { apiCall } from '@/lib/api-client'
-import type { GetCostsResponse, Cost } from '@/types'
-
-type CreateCostInput = Omit<Cost, 'id' | 'userName' | 'contactName' | 'percent'>
+import type { GetCostsResponse, Cost, CostDetail, CreateCostInput, UpdateCostInput } from '@/types'
 
 export const CostService = {
   getAll: async (params?: URLSearchParams) => {
@@ -10,7 +8,7 @@ export const CostService = {
   },
 
   getById: async (id: string) => {
-    return apiCall<Cost>(`/costs/${id}`)
+    return apiCall<CostDetail>(`/costs/${id}`)
   },
 
   create: async (data: CreateCostInput) => {
@@ -20,8 +18,8 @@ export const CostService = {
     })
   },
 
-  update: async (id: string, data: Partial<CreateCostInput>) => {
-    return apiCall<Cost>(`/costs/${id}`, {
+  update: async (id: string, data: UpdateCostInput) => {
+    return apiCall<CostDetail>(`/costs/${id}`, {
       method: 'PUT',
       body: JSON.stringify(data),
     })

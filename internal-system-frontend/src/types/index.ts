@@ -5,39 +5,111 @@ export enum ContactCategory {
 }
 
 export enum CostCategory {
-  FOOD = "Food",
-  PAYMENT = "Payment",
+  DINNER = "Dinner",
+  LUNCH = "Lunch",
   ENTERTAINMENT = "Entertainment",
   TRAVEL = "Travel",
+  OTHERS = "Others",
+}
+
+export enum GroupCategory {
+  DINNER = "Dinner",
+  LUNCH = "Lunch",
+  ENTERTAINMENT = "Entertainment",
+  TRAVEL = "Travel",
+  OTHERS = "Others",
 }
 
 export type Contact = {
-  id: string;
-  name: string;
-  email: string;
-  phone: string;
-  category: ContactCategory;
-};
-
-export type Cost = {
-  id: string;
-  userId: string;
-  contactId: string;
-  value: string;
-  category: CostCategory;
-  userName: string;
-  contactName: string;
-  percent?: number;
-};
+  id: string
+  name: string
+  email: string
+  phone: string
+  category: ContactCategory
+}
 
 export type GetContactsResponse = {
-  contacts: Contact[];
-  total: number;
-};
+  contacts: Contact[]
+  total: number
+}
+
+export type CreateContactInput = Omit<Contact, 'id'>
+
+export type GroupMember = {
+  id: string
+  name: string
+  email: string
+}
+
+export type Group = {
+  id: string
+  name: string
+  category: GroupCategory
+  createdAt: string
+  updatedAt: string
+}
+
+export type GroupDetail = Group & {
+  members: GroupMember[]
+}
+
+export type GetGroupsResponse = {
+  groups: Group[]
+  total: number
+}
+
+export type CreateGroupInput = {
+  name: string
+  category: GroupCategory
+  memberIds?: string[]
+}
+
+export type AddMemberInput = {
+  contactId: string
+}
+
+export type CostSplit = {
+  id: string
+  contactId: string
+  contactName: string
+  value: number
+  percentage: number
+}
+
+export type Cost = {
+  id: string
+  costName: string
+  totalValue: number
+  ownerPercentage: number
+  ownerValue: number
+  category: CostCategory
+  groupId?: string
+  groupName?: string
+  splitCount: number
+  createdAt: string
+}
+
+export type CostDetail = Cost & {
+  updatedAt: string
+  splits: CostSplit[]
+}
 
 export type GetCostsResponse = {
-  costs: Cost[];
-  total: number;
-};
+  costs: Cost[]
+  total: number
+}
 
-export type CreateContactInput = Omit<Contact, "id">;
+export type CreateCostInput = {
+  groupId?: string
+  costName: string
+  category: CostCategory
+  totalValue: number
+  ownerPercentage?: number
+}
+
+export type UpdateCostInput = {
+  costName: string
+  category: CostCategory
+  totalValue: number
+  ownerPercentage?: number
+}

@@ -8,10 +8,10 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useCostsQuery } from "@/hooks/queries/use-costs-query";
+import { useCostsQuery } from "@/hooks/queries/use-cost-query";
 import { BadgeType } from "@/utils/badge-types";
 
-export const CostsTable = ({}) => {
+export const CostsTable = () => {
   const { data } = useCostsQuery();
 
   const costs = data?.costs ?? [];
@@ -29,10 +29,11 @@ export const CostsTable = ({}) => {
           <Table className="w-full">
             <TableHeader>
               <TableRow>
-                <TableHead>Contact</TableHead>
-                <TableHead>User</TableHead>
-                <TableHead>Value</TableHead>
-                <TableHead>Percent</TableHead>
+                <TableHead>Name</TableHead>
+                <TableHead>Group</TableHead>
+                <TableHead>Total Value</TableHead>
+                <TableHead>Owner %</TableHead>
+                <TableHead>Splits</TableHead>
                 <TableHead className="text-right">Category</TableHead>
               </TableRow>
             </TableHeader>
@@ -41,16 +42,17 @@ export const CostsTable = ({}) => {
                 costs.map((cost) => (
                   <TableRow key={cost.id}>
                     <TableCell className="font-medium text-zinc-800">
-                      {cost.contactName}
+                      {cost.costName}
                     </TableCell>
-                    <TableCell>{cost.userName}</TableCell>
+                    <TableCell>{cost.groupName}</TableCell>
                     <TableCell>
-                      {Number(cost.value).toLocaleString("en-US", {
+                      {cost.totalValue.toLocaleString("en-US", {
                         style: "currency",
                         currency: "USD",
                       })}
                     </TableCell>
-                    <TableCell>{cost.percent ?? "10%"}</TableCell>
+                    <TableCell>{cost.ownerPercentage}%</TableCell>
+                    <TableCell>{cost.splitCount}</TableCell>
                     <TableCell className="text-right">
                       <BadgeType type={cost.category} />
                     </TableCell>
@@ -59,7 +61,7 @@ export const CostsTable = ({}) => {
               ) : (
                 <TableRow>
                   <TableCell
-                    colSpan={5}
+                    colSpan={6}
                     className="text-center text-gray-500 py-10"
                   >
                     No costs found

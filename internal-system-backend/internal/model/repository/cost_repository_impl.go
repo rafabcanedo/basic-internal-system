@@ -12,6 +12,7 @@ import (
 
 type CostRepository interface {
 	Create(domain domains.CostDomainInterface, memberIDs []string) (domains.CostDomainInterface, error)
+	Update(id string, domain domains.CostDomainInterface) (domains.CostDomainInterface, error)
 	FindAll(userID string) ([]domains.CostDomainInterface, error)
 	FindByID(id string) (domains.CostDomainInterface, error)
 	Delete(id string) error
@@ -86,6 +87,48 @@ func (r *costRepository) Create(domain domains.CostDomainInterface, memberIDs []
 		now,
 		nil,
 	), nil
+}
+
+func (r *costRepository) Update(id string, domain domains.CostDomainInterface) (domains.CostDomainInterface, error) {
+	now := time.Now()
+
+	tx, err := r.db.Begin()
+	if err != nil {
+		return nil, err
+	}
+	defer tx.Rollback()
+
+	_, err = tx.Exec(
+		`UPDATE cost_entities SET cost_name = $1, total_value = $2, owner_percentage = $3, category = $4, updated_at = $5 WHERE id = $6`,
+		domain.GetCostName(), domain.GetTotalValue(), domain.GetOwnerPercentage(), domain.GetCategory(), now, id,
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	var splitCount int
+	if err := tx.QueryRow(`SELECT COUNT(*) FROM cost_split_entities WHERE cost_id = $1`, id).Scan(&splitCount); err != nil {
+		return nil, err
+	}
+
+	if splitCount > 0 {
+		memberPercentage := math.Round(((100-domain.GetOwnerPercentage())/float64(splitCount))*100) / 100
+		memberValue := math.Round((domain.GetTotalValue()*memberPercentage/100)*100) / 100
+
+		_, err = tx.Exec(
+			`UPDATE cost_split_entities SET value = $1, percentage = $2, updated_at = $3 WHERE cost_id = $4`,
+			memberValue, memberPercentage, now, id,
+		)
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	if err = tx.Commit(); err != nil {
+		return nil, err
+	}
+
+	return r.FindByID(id)
 }
 
 func (r *costRepository) FindAll(userID string) ([]domains.CostDomainInterface, error) {

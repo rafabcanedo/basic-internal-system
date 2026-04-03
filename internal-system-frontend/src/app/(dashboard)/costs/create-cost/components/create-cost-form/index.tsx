@@ -17,7 +17,7 @@ import { Loader2 } from "lucide-react";
 import { HookFormSelect } from "@/components/hook-form-select";
 import { ICreateCostForm } from "./types";
 import { useRouter } from "next/navigation";
-import { useCreateCost } from "@/hooks/mutations/use-costs-mutations";
+import { useCreateCost } from "@/hooks/mutations/use-cost-mutations";
 
 interface CreateCostFormProps {
   contacts: { label: string; value: string }[];

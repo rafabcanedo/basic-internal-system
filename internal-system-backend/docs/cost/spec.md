@@ -2,9 +2,9 @@
 
 ## Overview
 
-The Cost feature allows a user to record an expense and optionally split it among a group's contacts. A cost has an owner, a name, a total value, a category, and an optional group. When a group is provided, the backend automatically calculates equal percentage splits for all members. The owner may optionally override their own percentage — if provided, the remaining percentage is distributed equally among the group members. Costs are **immutable** — they cannot be edited after creation. If a mistake occurs, the user deletes and recreates the cost.
+The Cost feature allows a user to record an expense and optionally split it among a group's contacts. A cost has an owner, a name, a total value, a category, and an optional group. When a group is provided, the backend automatically calculates equal percentage splits for all members. The owner may optionally override their own percentage — if provided, the remaining percentage is distributed equally among the group members.
 
-When a cost is created with a group, Cost_Split records are created atomically in the same database transaction.
+When a cost is created with a group, Cost_Split records are created atomically in the same database transaction. A cost can be updated after creation — only the scalar fields (`costName`, `totalValue`, `category`, `ownerPercentage`) can be changed. The group cannot be changed via update. If splits exist, their values and percentages are recalculated automatically based on the new `totalValue` and `ownerPercentage`.
 
 ---
 
@@ -17,6 +17,7 @@ When a cost is created with a group, Cost_Split records are created atomically i
 | POST | `/cost` | Create a new cost (and splits if group is provided) |
 | GET | `/costs` | List all costs owned by the authenticated user |
 | GET | `/cost/:id` | Get a cost by ID (includes splits inline) |
+| PUT | `/cost/:id` | Update a cost's scalar fields (recalculates splits if any) |
 | DELETE | `/cost/:id` | Delete a cost and all its splits |
 
 ---
@@ -49,6 +50,15 @@ When a cost is created with a group, Cost_Split records are created atomically i
 - Returns 404 if the cost does not exist
 - Returns 403 if the cost does not belong to the authenticated user
 - Splits are embedded inline in the response
+
+### Update (`PUT /cost/:id`)
+- `costName`, `totalValue`, and `category` are required
+- `ownerPercentage` is optional — if not provided, defaults to `0` (members absorb 100%)
+- `groupId` cannot be changed via update
+- Returns 404 if the cost does not exist
+- Returns 403 if the cost does not belong to the authenticated user
+- If the cost has splits, their `value` and `percentage` are recalculated atomically in the same DB transaction based on the new `totalValue` and `ownerPercentage`
+- Returns the full detail response (with splits inline)
 
 ### Delete (`DELETE /cost/:id`)
 - Returns 404 if the cost does not exist

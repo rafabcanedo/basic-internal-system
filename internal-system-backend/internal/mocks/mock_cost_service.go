@@ -49,6 +49,21 @@ func (mr *MockCostServiceMockRecorder) Create(domain, ownerPercentage any) *gomo
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Create", reflect.TypeOf((*MockCostService)(nil).Create), domain, ownerPercentage)
 }
 
+// Update mocks base method.
+func (m *MockCostService) Update(id, userID string, domain domains.CostDomainInterface) (domains.CostDomainInterface, *rest_errors.RestErrors) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Update", id, userID, domain)
+	ret0, _ := ret[0].(domains.CostDomainInterface)
+	ret1, _ := ret[1].(*rest_errors.RestErrors)
+	return ret0, ret1
+}
+
+// Update indicates an expected call of Update.
+func (mr *MockCostServiceMockRecorder) Update(id, userID, domain any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Update", reflect.TypeOf((*MockCostService)(nil).Update), id, userID, domain)
+}
+
 // FindAll mocks base method.
 func (m *MockCostService) FindAll(userID string) ([]domains.CostDomainInterface, *rest_errors.RestErrors) {
 	m.ctrl.T.Helper()

@@ -48,6 +48,21 @@ func (mr *MockCostRepositoryMockRecorder) Create(domain, memberIDs any) *gomock.
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Create", reflect.TypeOf((*MockCostRepository)(nil).Create), domain, memberIDs)
 }
 
+// Update mocks base method.
+func (m *MockCostRepository) Update(id string, domain domains.CostDomainInterface) (domains.CostDomainInterface, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Update", id, domain)
+	ret0, _ := ret[0].(domains.CostDomainInterface)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// Update indicates an expected call of Update.
+func (mr *MockCostRepositoryMockRecorder) Update(id, domain any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Update", reflect.TypeOf((*MockCostRepository)(nil).Update), id, domain)
+}
+
 // FindAll mocks base method.
 func (m *MockCostRepository) FindAll(userID string) ([]domains.CostDomainInterface, error) {
 	m.ctrl.T.Helper()
