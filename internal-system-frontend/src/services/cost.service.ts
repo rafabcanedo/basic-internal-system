@@ -3,7 +3,7 @@ import type { GetCostsResponse, Cost } from '@/types'
 
 type CreateCostInput = Omit<Cost, 'id' | 'userName' | 'contactName' | 'percent'>
 
-export const CostsService = {
+export const CostService = {
   getAll: async (params?: URLSearchParams) => {
     const query = params ? `?${params.toString()}` : ''
     return apiCall<GetCostsResponse>(`/costs${query}`)

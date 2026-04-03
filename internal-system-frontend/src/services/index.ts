@@ -1,2 +1,2 @@
-export * from './contacts.service'
-export * from './costs.service'
+export * from './contact.service'
+export * from './cost.service'

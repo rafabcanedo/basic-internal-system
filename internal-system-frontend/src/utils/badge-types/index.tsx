@@ -1,7 +1,7 @@
-import { ContactCategory, CostCategory, TransactionCategory } from "@/types";
+import { ContactCategory, CostCategory } from "@/types";
 
 interface ITypeBadge {
-  type: ContactCategory | TransactionCategory | CostCategory
+  type: ContactCategory | CostCategory
 }
 
 const categoryStyles: Record<string, string> = {
@@ -13,7 +13,6 @@ const categoryStyles: Record<string, string> = {
   [CostCategory.PAYMENT]: "bg-green-500/60 text-green-800",
   [CostCategory.ENTERTAINMENT]: "bg-emerald-500/60 text-emerald-800",
   [CostCategory.TRAVEL]: "bg-orange-500/60 text-orange-800",
-  [TransactionCategory.TRANSFER]: "bg-purple-500/60 text-purple-800",
 };
 
 export function BadgeType({ type }: ITypeBadge) {

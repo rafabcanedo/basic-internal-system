@@ -5,7 +5,7 @@ import type {
   CreateContactInput 
 } from '@/types'
 
-export const ContactsService = {
+export const ContactService = {
   getAll: async (params?: URLSearchParams) => {
     const query = params ? `?${params.toString()}` : ''
     return apiCall<GetContactsResponse>(`/contacts${query}`)

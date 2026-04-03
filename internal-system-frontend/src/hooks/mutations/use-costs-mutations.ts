@@ -1,7 +1,7 @@
 "use client";
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { CostsService } from "@/services/costs.service";
+import { CostService } from "@/services/cost.service";
 import { toast } from "sonner";
 import type { Cost } from "@/types";
 import { ApiError } from "@/lib/errors/api.error";
@@ -15,7 +15,7 @@ export function useCreateCost() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (data: CreateCostInput) => CostsService.create(data),
+    mutationFn: (data: CreateCostInput) => CostService.create(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["costs"] });
       toast.success("Cost created successfully!");
@@ -31,7 +31,7 @@ export function useUpdateCost() {
 
   return useMutation({
     mutationFn: (variables: { id: string; data: Partial<CreateCostInput> }) =>
-      CostsService.update(variables.id, variables.data),
+      CostService.update(variables.id, variables.data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["costs"] });
       toast.success("Cost updated successfully!");
@@ -46,7 +46,7 @@ export function useDeleteCost() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (id: string) => CostsService.delete(id),
+    mutationFn: (id: string) => CostService.delete(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["costs"] });
       toast.success("Cost deleted successfully!");

@@ -4,13 +4,6 @@ export enum ContactCategory {
   WORK = "Work",
 }
 
-export enum TransactionCategory {
-  FOOD = "Food",
-  PAYMENT = "Payment",
-  TRANSFER = "Transfer",
-  ENTERTAINMENT = "Entertainment",
-}
-
 export enum CostCategory {
   FOOD = "Food",
   PAYMENT = "Payment",
@@ -24,14 +17,6 @@ export type Contact = {
   email: string;
   phone: string;
   category: ContactCategory;
-};
-
-export type Transaction = {
-  id: string;
-  contactId?: number;
-  place: string;
-  value: string;
-  category: TransactionCategory;
 };
 
 export type Cost = {

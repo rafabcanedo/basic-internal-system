@@ -1,16 +1,16 @@
 'use client'
 
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { ContactsService } from '@/services/contacts.service'
 import { toast } from 'sonner'
 import type { CreateContactInput } from '@/types'
 import { ApiError } from '@/lib/errors/api.error'
+import { ContactService } from '@/services'
 
 export function useCreateContact() {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: (data: CreateContactInput) => ContactsService.create(data),
+    mutationFn: (data: CreateContactInput) => ContactService.create(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['contacts'] })
       toast.success('Contact created successfully!')
@@ -26,7 +26,7 @@ export function useUpdateContact() {
 
   return useMutation({
     mutationFn: ({ id, data }: { id: string; data: Partial<CreateContactInput> }) =>
-      ContactsService.update(id, data),
+      ContactService.update(id, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['contacts'] })
       toast.success('Contact updated successfully!')
@@ -41,7 +41,7 @@ export function useDeleteContact() {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: (id: string) => ContactsService.delete(id),
+    mutationFn: (id: string) => ContactService.delete(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['contacts'] })
       toast.success('Contact deleted successfully!')

@@ -8,14 +8,12 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import type { Transaction } from "@/types";
 
 interface TablePaymentsProps {
-  transactions?: Transaction[];
   total?: number;
 }
 
-export const TablePayments = ({ transactions, total }: TablePaymentsProps) => {
+export const TablePayments = ({ total }: TablePaymentsProps) => {
   return (
     <div className="w-full flex justify-center mt-6 mb-6">
       <div className="w-full max-w-7xl rounded-xl border bg-white shadow-sm">
