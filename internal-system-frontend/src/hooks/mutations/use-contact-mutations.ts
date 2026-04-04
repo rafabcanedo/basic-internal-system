@@ -1,19 +1,19 @@
 'use client'
 
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { CostService } from '@/services/cost.service'
+import { ContactService } from '@/services/contact.service'
 import { toast } from 'sonner'
-import type { CreateCostInput, UpdateCostInput } from '@/types'
+import type { CreateContactInput } from '@/types'
 import { ApiError } from '@/lib/errors/api.error'
 
-export function useCreateCost() {
+export function useCreateContact() {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: (data: CreateCostInput) => CostService.create(data),
+    mutationFn: (data: CreateContactInput) => ContactService.create(data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['costs'] })
-      toast.success('Cost created successfully!')
+      queryClient.invalidateQueries({ queryKey: ['contacts'] })
+      toast.success('Contact created successfully!')
     },
     onError: (error: ApiError) => {
       toast.error(error.message)
@@ -21,15 +21,15 @@ export function useCreateCost() {
   })
 }
 
-export function useUpdateCost() {
+export function useUpdateContact() {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: ({ id, data }: { id: string; data: UpdateCostInput }) =>
-      CostService.update(id, data),
+    mutationFn: ({ id, data }: { id: string; data: Partial<CreateContactInput> }) =>
+      ContactService.update(id, data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['costs'] })
-      toast.success('Cost updated successfully!')
+      queryClient.invalidateQueries({ queryKey: ['contacts'] })
+      toast.success('Contact updated successfully!')
     },
     onError: (error: ApiError) => {
       toast.error(error.message)
@@ -37,14 +37,14 @@ export function useUpdateCost() {
   })
 }
 
-export function useDeleteCost() {
+export function useDeleteContact() {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: (id: string) => CostService.delete(id),
+    mutationFn: (id: string) => ContactService.delete(id),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['costs'] })
-      toast.success('Cost deleted successfully!')
+      queryClient.invalidateQueries({ queryKey: ['contacts'] })
+      toast.success('Contact deleted successfully!')
     },
     onError: (error: ApiError) => {
       toast.error(error.message)

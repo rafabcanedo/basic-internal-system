@@ -1,4 +1,3 @@
-import { AvatarCosts } from "./components/avatar-costs";
 import { Button } from "@/components/ui/button";
 import { CostsTable } from "./components/costs-table";
 import Link from "next/link";
@@ -7,24 +6,15 @@ import {
   HydrationBoundary,
   QueryClient,
 } from "@tanstack/react-query";
-import { CostsService } from "@/services";
+import { CostService } from "@/services";
 
 export default async function Costs() {
   const queryClient = new QueryClient();
 
-  const data = await queryClient.fetchQuery({
+  await queryClient.prefetchQuery({
     queryKey: ["costs"],
-    queryFn: () => CostsService.getAll(),
+    queryFn: () => CostService.getAll(),
   });
-
-  const uniqueContacts = Array.from(
-    new Map(
-      data.costs.map((cost) => [
-        cost.contactId,
-        { id: cost.contactId, name: cost.contactName },
-      ]),
-    ).values(),
-  );
 
   return (
     <div className="flex flex-col px-8 w-full">
@@ -35,15 +25,7 @@ export default async function Costs() {
         </Link>
       </header>
 
-      {uniqueContacts.length > 0 && (
-        <div className="grid grid-cols-6 gap-y-4 mt-8 w-1/2 mx-auto">
-          {uniqueContacts.map((contact) => (
-            <AvatarCosts key={contact.id} name={contact.name} />
-          ))}
-        </div>
-      )}
-
-      <div className="mt-12">
+<div className="mt-12">
         <HydrationBoundary state={dehydrate(queryClient)}>
           <CostsTable />
         </HydrationBoundary>

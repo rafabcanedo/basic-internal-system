@@ -1,5 +1,5 @@
 import { AddContact } from "./components/add-contacts";
-import { ContactsService } from "@/services";
+import { ContactService } from "@/services";
 import { dehydrate, HydrationBoundary, QueryClient } from "@tanstack/react-query";
 import { TableContact } from "./components/table-contacts";
 
@@ -9,7 +9,7 @@ export default async function MyContacts() {
 
   await queryClient.prefetchQuery({
     queryKey: ['contacts'],
-    queryFn: () => ContactsService.getAll(),
+    queryFn: () => ContactService.getAll(),
   })
 
   return (

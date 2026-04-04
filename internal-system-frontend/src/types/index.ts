@@ -28,10 +28,7 @@ export type Contact = {
   category: ContactCategory
 }
 
-export type GetContactsResponse = {
-  contacts: Contact[]
-  total: number
-}
+export type GetContactsResponse = Contact[]
 
 export type CreateContactInput = Omit<Contact, 'id'>
 
@@ -94,10 +91,7 @@ export type CostDetail = Cost & {
   splits: CostSplit[]
 }
 
-export type GetCostsResponse = {
-  costs: Cost[]
-  total: number
-}
+export type GetCostsResponse = Cost[]
 
 export type CreateCostInput = {
   groupId?: string

@@ -15,8 +15,8 @@ export const TableContact = () => {
 
   const { data } = useContactsQuery()
 
-  const contacts = data?.contacts ?? []
-  const total = data?.total ?? 0
+  const contacts = data ?? []
+  const total = data?.length ?? 0
 
   return (
     <div className="w-full flex justify-center mt-6 mb-6">

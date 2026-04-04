@@ -43,18 +43,18 @@ export const RecentCosts = ({ costs }: CostsTableProps) => {
               {limitedCosts.map((cost) => (
                 <TableRow key={cost.id}>
                   <TableCell className="font-medium text-zinc-800">
-                    {cost.contactName}
+                    {cost.costName}
                   </TableCell>
 
                   <TableCell className="text-right font-mono text-sm text-zinc-700">
-                    {Number(cost.value).toLocaleString("en-US", {
+                    {Number(cost.totalValue).toLocaleString("en-US", {
                       style: "currency",
                       currency: "USD",
                     })}
                   </TableCell>
 
                   <TableCell className="text-right font-mono text-sm text-zinc-700">
-                    {cost.percent ?? "10%"}
+                    {cost.ownerPercentage}%
                   </TableCell>
 
                   <TableCell className="text-right text-sm text-zinc-500">

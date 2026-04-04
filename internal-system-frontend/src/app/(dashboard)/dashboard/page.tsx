@@ -10,8 +10,8 @@ import { apiCall } from "@/lib/api-client";
 
 export default async function Dashboard() {
 
-    const data = await apiCall<GetCostsResponse>('/costs')
-    const contactsData = await apiCall<GetContactsResponse>('/contacts')
+    const costs = await apiCall<GetCostsResponse>('/costs')
+    const contacts = await apiCall<GetContactsResponse>('/contacts')
 
     return (
         <div className="flex flex-col">
@@ -32,11 +32,11 @@ export default async function Dashboard() {
                 </div>
 
                 <div>
-                    <RecentCosts costs={data.costs} total={data.total} />
+                    <RecentCosts costs={costs} total={costs.length} />
                 </div>
 
                 <div>
-                    <RecentContacts contacts={contactsData.contacts} total={contactsData.total} />
+                    <RecentContacts contacts={contacts} total={contacts.length} />
                 </div>
             </div>
         </div>

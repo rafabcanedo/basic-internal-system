@@ -14,8 +14,8 @@ import { BadgeType } from "@/utils/badge-types";
 export const CostsTable = () => {
   const { data } = useCostsQuery();
 
-  const costs = data?.costs ?? [];
-  const total = data?.total ?? 0;
+  const costs = data ?? [];
+  const total = data?.length ?? 0;
 
   return (
     <div className="w-full flex justify-center mt-6 mb-6">
