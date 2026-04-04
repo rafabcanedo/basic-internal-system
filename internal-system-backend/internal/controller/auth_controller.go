@@ -71,7 +71,7 @@ func (ac *AuthController) Login(c *gin.Context) {
 	}
 
 	c.SetCookie("access_token", accessToken, 900, "/", "", false, true)
-	c.SetCookie("refresh_token", refreshToken, 172800, "/auth/refresh", "", false, true)
+	c.SetCookie("refresh_token", refreshToken, 172800, "/auth", "", false, true)
 
 	c.JSON(http.StatusOK, gin.H{
 		"message": "Login successful",
@@ -143,7 +143,7 @@ func (ac *AuthController) Refresh(c *gin.Context) {
 	}
 
 	c.SetCookie("access_token", newAccessToken, 900, "/", "", false, true)
-	c.SetCookie("refresh_token", newRefreshToken, 172800, "/auth/refresh", "", false, true)
+	c.SetCookie("refresh_token", newRefreshToken, 172800, "/auth", "", false, true)
 
 	c.JSON(http.StatusOK, gin.H{"message": "Token refreshed"})
 }
@@ -156,7 +156,7 @@ func (ac *AuthController) Logout(c *gin.Context) {
 	}
 
 	c.SetCookie("access_token", "", -1, "/", "", false, true)
-	c.SetCookie("refresh_token", "", -1, "/auth/refresh", "", false, true)
+	c.SetCookie("refresh_token", "", -1, "/auth", "", false, true)
 
 	c.JSON(http.StatusOK, gin.H{"message": "Logged out successfully"})
 }
