@@ -7,6 +7,7 @@ import {
   QueryClient,
 } from "@tanstack/react-query";
 import { CostService } from "@/services";
+import { AvatarCost } from "./components/avatar-cost";
 
 export default async function Costs() {
   const queryClient = new QueryClient();
@@ -15,6 +16,15 @@ export default async function Costs() {
     queryKey: ["costs"],
     queryFn: () => CostService.getAll(),
   });
+
+  const avatarList = [
+    { id: 1, name: "Isa" },
+    { id: 2, name: "Artur" },
+    { id: 3, name: "Joao" },
+    { id: 1, name: "Gabriela" },
+    { id: 2, name: "Rafael" },
+    { id: 3, name: "Daniela" },
+  ]
 
   return (
     <div className="flex flex-col px-8 w-full">
@@ -25,7 +35,13 @@ export default async function Costs() {
         </Link>
       </header>
 
-<div className="mt-12">
+      <div className="flex justify-center items-center gap-8">
+        {avatarList.map((item) => (
+          <AvatarCost key={item.id} name={item.name} />
+        ))}
+      </div>
+
+      <div className="mt-12">
         <HydrationBoundary state={dehydrate(queryClient)}>
           <CostsTable />
         </HydrationBoundary>

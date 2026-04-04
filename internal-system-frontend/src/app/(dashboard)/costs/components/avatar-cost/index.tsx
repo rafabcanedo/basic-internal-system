@@ -1,10 +1,10 @@
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 
-interface IAvatarCosts {
+interface IAvatarCost {
     name: string;
 }
 
-export const AvatarCosts = ({ name }: IAvatarCosts) => {
+export const AvatarCost = ({ name }: IAvatarCost) => {
 
     const firstTwoLetters = name.trim().slice(0, 2).toUpperCase()
 

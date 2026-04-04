@@ -8,6 +8,7 @@ interface ITextInput {
   type: InputType;
   label: string;
   title: string;
+  disabled?: boolean;
 }
 
 export const HookFormTextInput: FC<ITextInput> = ({
@@ -15,6 +16,7 @@ export const HookFormTextInput: FC<ITextInput> = ({
   type,
   label,
   title,
+  disabled,
 }) => {
 
   const {
@@ -25,7 +27,7 @@ export const HookFormTextInput: FC<ITextInput> = ({
   return (
     <div>
       <label className='text-xs text-zinc-600'>{title}</label>
-      <Input placeholder={label} type={type} {...register(name)} />
+      <Input placeholder={label} type={type} {...register(name)} disabled={disabled} className='disabled:border-zinc-400 disabled:cursor-not-allowed' />
       <p className="text-xs text-red-400">
         {errors[name]?.message as string}
       </p>

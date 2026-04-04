@@ -63,9 +63,9 @@ export const ProfileForm = () => {
               <HookFormTextInput title="Password" name="password" label="Password" type="password" />
               <HookFormTextInput title="Phone" name="phone" label="+55 11 997117911" type="text" />
 
-              <HookFormTextInput title="Street" name="street" label="Jhon Jason Street" type="text" />
-              <HookFormTextInput title="Neighborhood" name="neighborhood" label="Downtown" type="text" />
-              <HookFormTextInput title="Zip" name="zip" label="374970" type="text" />
+              <HookFormTextInput title="Street" name="street" label="Jhon Jason Street" type="text" disabled />
+              <HookFormTextInput title="Neighborhood" name="neighborhood" label="Downtown" type="text" disabled />
+              <HookFormTextInput title="Zip" name="zip" label="374970" type="text" disabled />
             </CardContent>
             <CardFooter className="flex flex-col justify-end">
               <Button className="w-full" type="submit" disabled={isSubmitting}>
