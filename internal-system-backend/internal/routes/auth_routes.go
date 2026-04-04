@@ -14,5 +14,6 @@ func AuthRoutes(router *gin.Engine, ctrl *controller.AuthController) {
 		authGroup.POST("/logout", ctrl.Logout)
 
 		authGroup.GET("/profile", middleware.AuthMiddleware(), ctrl.GetProfile)
+		authGroup.PUT("/profile", middleware.AuthMiddleware(), ctrl.UpdateProfile)
 	}
 }

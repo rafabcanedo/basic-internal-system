@@ -22,7 +22,7 @@ export function useAuthMutations() {
     onSuccess: (data) => {
       toast.success(data.message || "Login successful!");
       
-      queryClient.clear();
+      queryClient.setQueryData(["user"], data.user ?? null)
       
       router.push("/dashboard");
       

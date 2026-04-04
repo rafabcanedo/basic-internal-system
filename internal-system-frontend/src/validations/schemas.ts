@@ -1,5 +1,5 @@
 import * as yup from "yup";
-import { emailField, passwordField, nameField, phoneField, trimmed, valueField, percentField } from "./fields";
+import { emailField, passwordField, nameField, phoneField, trimmed, valueField } from "./fields";
 import { ContactCategory, CostCategory } from "@/types";
 
 export const signInSchema = yup.object({
@@ -19,13 +19,9 @@ export const forgotPasswordSchema = yup.object({
 });
 
 export const profileSchema = yup.object({
-  name: trimmed(nameField(2)).optional(),
-  email: trimmed(emailField()).optional(),
-  password: passwordField(6).optional(),
-  phone: trimmed(phoneField()).optional(),
-  street: yup.string().optional(),
-  neighborhood: yup.string().optional(),
-  zip: yup.string().optional(),
+  name: trimmed(nameField(2)),
+  email: trimmed(emailField()),
+  phone: trimmed(phoneField()),
 });
 
 export const addContactSchema = yup.object({

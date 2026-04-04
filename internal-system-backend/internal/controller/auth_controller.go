@@ -161,6 +161,54 @@ func (ac *AuthController) Logout(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"message": "Logged out successfully"})
 }
 
+func (ac *AuthController) UpdateProfile(c *gin.Context) {
+	userID := c.GetString("userID")
+	if userID == "" {
+		restErr := rest_errors.NewUnauthorizedRequestError("user identification missing")
+		c.JSON(restErr.Code, restErr)
+		return
+	}
+
+	var req request.UpdateProfileRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		restErr := validation.ValidateUserError(err)
+		c.JSON(restErr.Code, restErr)
+		return
+	}
+
+	current, restErr := ac.userService.FindByID(userID)
+	if restErr != nil {
+		c.JSON(restErr.Code, restErr)
+		return
+	}
+
+	if req.Name != "" {
+		current.SetName(req.Name)
+	}
+	if req.Email != "" {
+		current.SetEmail(req.Email)
+	}
+	if req.Phone != "" {
+		current.SetPhone(req.Phone)
+	}
+
+	updated, restErr := ac.userService.Update(current)
+	if restErr != nil {
+		c.JSON(restErr.Code, restErr)
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"message": "Profile updated successfully",
+		"user": response.UserResponse{
+			ID:    updated.GetID(),
+			Name:  updated.GetName(),
+			Email: updated.GetEmail(),
+			Phone: updated.GetPhone(),
+		},
+	})
+}
+
 func (ac *AuthController) GetProfile(c *gin.Context) {
 	userID := c.GetString("userID")
 	if userID == "" {

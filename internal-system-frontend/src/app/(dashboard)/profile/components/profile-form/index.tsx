@@ -1,75 +1,70 @@
 "use client"
 
+import { useEffect } from "react"
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { FormProvider, useForm, type SubmitHandler } from "react-hook-form"
+import { yupResolver } from "@hookform/resolvers/yup"
 import { HookFormTextInput } from "@/components/hook-form-text-input"
-import { toast } from "sonner"
+import { profileSchema } from "@/validations/schemas"
+import { useUser } from "@/providers/contexts/user-context"
+import { useUpdateProfileMutation } from "@/hooks/mutations/use-update-profile-mutation"
+import * as yup from "yup"
 
-interface IProfileForm {
-  name: string
-  email: string;
-  password: string;
-  phone: string;
+type ProfileFormValues = yup.InferType<typeof profileSchema> & {
+  street?: string
+  neighborhood?: string
+  zip?: string
 }
-
-interface IUserAddress extends IProfileForm {
-  street: string;
-  neighborhood: string;
-  zip: string;
-}
-
-type ProfileFormValues = Partial<IUserAddress>;
 
 export const ProfileForm = () => {
-
-  const defaultValues: ProfileFormValues = {
-    name: "John Jason",
-    email: "john@example.com",
-    password: "",
-    phone: "+55 11 997117911",
-    street: "John Jason Street",
-    neighborhood: "Downtown",
-    zip: "374970",
-  }
+  const { user } = useUser()
+  const updateProfile = useUpdateProfileMutation()
 
   const methods = useForm<ProfileFormValues>({
-    defaultValues,
+    resolver: yupResolver(profileSchema),
+    defaultValues: { name: "", email: "", phone: "", street: "", neighborhood: "", zip: "" },
     mode: "onChange",
   })
 
-  const { handleSubmit, formState, reset, getValues } = methods
-  const { isSubmitting } = formState
+  const { handleSubmit, formState, reset } = methods
+  const { isSubmitting, isDirty } = formState
 
-  const handleChangeDetailsAccount: SubmitHandler<ProfileFormValues> = (data) => {
-    console.log("Values to save:", data);
+  useEffect(() => {
+    if (user) {
+      reset({ name: user.name, email: user.email, phone: user.phone })
+    }
+  }, [user, reset])
 
-    reset({ ...getValues(), password: "" }, { keepDirty: false, keepTouched: false })
-
-    toast.success("Profile changed recorded.");
+  const handleSubmitProfile: SubmitHandler<ProfileFormValues> = async (data) => {
+    await updateProfile.mutateAsync(data)
+    reset(data)
   }
 
   return (
     <div>
       <FormProvider {...methods}>
-        <form onSubmit={handleSubmit(handleChangeDetailsAccount)}>
+        <form onSubmit={handleSubmit(handleSubmitProfile)}>
           <Card className="w-[800px]">
             <CardHeader>
               <CardTitle className="text-center">Your Profile</CardTitle>
             </CardHeader>
             <CardContent className="grid grid-cols-2 gap-4 text-zinc-600">
-              <HookFormTextInput title="Name" name="name" label="Jhon Jason" type="text" />
-              <HookFormTextInput title="Email" name="email" label="jhon@email.com" type="text" />
-              <HookFormTextInput title="Password" name="password" label="Password" type="password" />
+              <HookFormTextInput title="Name" name="name" label="John Jason" type="text" />
+              <HookFormTextInput title="Email" name="email" label="john@example.com" type="text" />
               <HookFormTextInput title="Phone" name="phone" label="+55 11 997117911" type="text" />
 
-              <HookFormTextInput title="Street" name="street" label="Jhon Jason Street" type="text" disabled />
-              <HookFormTextInput title="Neighborhood" name="neighborhood" label="Downtown" type="text" disabled />
-              <HookFormTextInput title="Zip" name="zip" label="374970" type="text" disabled />
+              <HookFormTextInput title="Street" name="street" label="Street" type="text" disabled />
+              <HookFormTextInput title="Neighborhood" name="neighborhood" label="Neighborhood" type="text" disabled />
+              <HookFormTextInput title="Zip" name="zip" label="Zip" type="text" disabled />
             </CardContent>
             <CardFooter className="flex flex-col justify-end">
-              <Button className="w-full" type="submit" disabled={isSubmitting}>
-                {isSubmitting ? "Saving..." : "Save"}
+              <Button
+                className="w-full"
+                type="submit"
+                disabled={isSubmitting || !isDirty || updateProfile.isPending}
+              >
+                {isSubmitting || updateProfile.isPending ? "Saving..." : "Save"}
               </Button>
             </CardFooter>
           </Card>

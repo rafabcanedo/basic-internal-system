@@ -5,7 +5,7 @@ import { ReactNode } from "react";
 import { Toaster } from "@/components/ui/sonner";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { SideBar } from "@/components/side-bar";
-import { ReactQueryProvider } from "@/lib/react-query";
+import { AppProviders } from "@/providers";
 
 const poppins = Poppins({
   variable: "--font-poppins",
@@ -52,13 +52,13 @@ export default function PrivateLayout({
                 antialiased
               `}
       >
-        <ReactQueryProvider>
+        <AppProviders>
           <SidebarProvider>
             <SideBar />
             <main className="flex-1 px-8">{children}</main>
           </SidebarProvider>
           <Toaster richColors position="bottom-center" />
-        </ReactQueryProvider>
+        </AppProviders>
       </body>
     </html>
   );

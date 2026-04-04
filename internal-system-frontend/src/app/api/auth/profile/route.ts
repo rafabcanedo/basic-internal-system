@@ -25,3 +25,30 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }
+
+export async function PUT(request: NextRequest) {
+  try {
+    const accessToken = request.cookies.get('access_token')?.value
+    const body = await request.json()
+
+    const res = await fetch(`${API_BASE_URL}/auth/profile`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        ...(accessToken ? { Cookie: `access_token=${accessToken}` } : {}),
+      },
+      body: JSON.stringify(body),
+    })
+
+    const data = await res.json()
+
+    if (!res.ok) {
+      return NextResponse.json(data, { status: res.status })
+    }
+
+    return NextResponse.json(data)
+  } catch (error) {
+    console.error('[PUT /api/auth/profile] Error:', error)
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+  }
+}

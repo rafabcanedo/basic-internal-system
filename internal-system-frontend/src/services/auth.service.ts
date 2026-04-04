@@ -24,6 +24,17 @@ export interface ISignUpRequest {
   phone: string;
 }
 
+export interface IUpdateProfileRequest {
+  name?: string;
+  email?: string;
+  phone?: string;
+}
+
+export interface IUpdateProfileResponse {
+  message: string;
+  user: IUserData;
+}
+
 export const authService = {
   async signIn(data: ISignInRequest): Promise<IAuthResponse> {
     const res = await fetch("/api/auth/signin", {
@@ -51,6 +62,13 @@ export const authService = {
   async getProfile(): Promise<IUserData> {
     return apiCall<IUserData>("/auth/profile", {
       method: "GET",
+    });
+  },
+
+  async updateProfile(data: IUpdateProfileRequest): Promise<IUpdateProfileResponse> {
+    return apiCall<IUpdateProfileResponse>("/auth/profile", {
+      method: "PUT",
+      body: JSON.stringify(data),
     });
   },
 
