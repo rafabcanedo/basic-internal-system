@@ -42,7 +42,7 @@ export const authService = {
   },
 
   async signUp(data: ISignUpRequest): Promise<{ message: string }> {
-    return apiCall<{ message: string }>("/user", {
+    return apiCall<{ message: string }>("/auth/signup", {
       method: "POST",
       body: JSON.stringify(data),
     });

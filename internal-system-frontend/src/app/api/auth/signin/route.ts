@@ -20,7 +20,10 @@ export async function POST(request: NextRequest) {
 
     const cookies = res.headers.getSetCookie();
     cookies.forEach((cookie) => {
-      response.headers.append("Set-Cookie", cookie);
+      const modified = cookie.startsWith("refresh_token=")
+        ? cookie.replace("Path=/auth", "Path=/api/auth")
+        : cookie;
+      response.headers.append("Set-Cookie", modified);
     });
 
     return response;

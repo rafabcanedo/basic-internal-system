@@ -20,7 +20,7 @@ export function useAuthMutations() {
   const loginMutation = useMutation<IAuthResponse, IRestError, ISignInRequest>({
     mutationFn: authService.signIn,
     onSuccess: (data) => {
-      toast.success(data.message || "Login realizado com sucesso!");
+      toast.success(data.message || "Login successful!");
       
       queryClient.clear();
       
@@ -29,18 +29,18 @@ export function useAuthMutations() {
       router.refresh();
     },
     onError: (error) => {
-      toast.error(error.message || "Credenciais inválidas ou erro no servidor");
+      toast.error(error.message || "Invalid credentials or server error");
     },
   });
 
   const registerMutation = useMutation<{ message: string }, IRestError, ISignUpRequest>({
     mutationFn: authService.signUp,
     onSuccess: (data) => {
-      toast.success(data.message || "Conta criada! Agora você pode fazer login.");
+      toast.success(data.message || "Account created! You can now sign in.");
       router.push("/signin");
     },
     onError: (error) => {
-      toast.error(error.message || "Erro ao criar conta. Tente outro e-mail.");
+      toast.error(error.message || "Failed to create account. Try a different email.");
     },
   });
 

@@ -10,9 +10,22 @@ function getBaseUrl() {
   return API_BASE_URL
 }
 
+async function tryRefresh(): Promise<boolean> {
+  try {
+    const res = await fetch('/api/auth/refresh', {
+      method: 'POST',
+      credentials: 'include',
+    })
+    return res.ok
+  } catch {
+    return false
+  }
+}
+
 export async function apiCall<T>(
   endpoint: string,
-  options: RequestInit = {}
+  options: RequestInit = {},
+  retry = true
 ): Promise<T> {
   try {
     const baseUrl = getBaseUrl()
@@ -32,32 +45,37 @@ export async function apiCall<T>(
     const data = text ? JSON.parse(text) : null
 
     if (!res.ok) {
-  switch (res.status) {
-    case 400:
-      if (data?.fields) {
-        throw new ValidationError(data.fields)
+      switch (res.status) {
+        case 400:
+          if (data?.fields) {
+            throw new ValidationError(data.fields)
+          }
+          throw new ApiError(400, data?.error || 'Bad request', data)
+
+        case 401:
+          if (retry && typeof window !== 'undefined') {
+            const refreshed = await tryRefresh()
+            if (refreshed) return apiCall<T>(endpoint, options, false)
+            window.location.href = '/signin'
+          }
+          throw new UnauthorizedError()
+
+        case 403:
+          throw new ForbiddenError()
+
+        case 404:
+          throw new NotFoundError(data?.resource || 'Resource')
+
+        case 500:
+          throw new InternalServerError()
+
+        case 503:
+          throw new ServiceUnavailableError()
+
+        default:
+          throw new ApiError(res.status, data?.error || 'Unknown error', data)
       }
-      throw new ApiError(400, data?.error || 'Bad request', data)
-    
-    case 401:
-      throw new UnauthorizedError()
-    
-    case 403:
-      throw new ForbiddenError()
-    
-    case 404:
-      throw new NotFoundError(data?.resource || 'Resource')
-    
-    case 500:
-      throw new InternalServerError()
-    
-    case 503:
-      throw new ServiceUnavailableError()
-    
-    default:
-      throw new ApiError(res.status, data?.error || 'Unknown error', data)
-  }
-}
+    }
 
     return data as T
   } catch (error) {
