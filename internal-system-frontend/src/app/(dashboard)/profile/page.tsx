@@ -5,6 +5,7 @@ import { ProfileAvatar } from "./components/profile-avatar"
 import { ProfileForm } from "./components/profile-form"
 import { Button } from "@/components/ui/button"
 import { useLogoutMutation } from "@/hooks/mutations/use-logout-mutations"
+import { ProfileDelete } from "./components/profile-delete"
 
 export default function Profile() {
 
@@ -26,6 +27,10 @@ export default function Profile() {
             </header>
             <div className="flex mt-8">
                 <ProfileForm />
+            </div>
+
+            <div className="flex mt-8">
+                <ProfileDelete />
             </div>
 
             <div className="mt-10">
