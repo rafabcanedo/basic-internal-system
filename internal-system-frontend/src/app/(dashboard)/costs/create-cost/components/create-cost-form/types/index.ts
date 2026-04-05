@@ -1,8 +1,4 @@
-import { CostCategory } from "@/types";
+import type { InferType } from "yup";
+import { addCostSchema } from "@/validations/schemas";
 
-export interface ICreateCostForm {
-    contactId: string;
-    category: CostCategory;
-    value: string;
-    percent: string;
-}
+export type ICreateCostForm = InferType<typeof addCostSchema>;

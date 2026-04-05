@@ -18,23 +18,27 @@ import { HookFormSelect } from "@/components/hook-form-select";
 import { ICreateCostForm } from "./types";
 import { useRouter } from "next/navigation";
 import { useCreateCost } from "@/hooks/mutations/use-cost-mutations";
+import { useGroupsQuery } from "@/hooks/queries/use-group-query";
 
-interface CreateCostFormProps {
-  contacts: { label: string; value: string }[];
-}
-
-export default function CreateCostForm({ contacts }: CreateCostFormProps) {
+export default function CreateCostForm() {
   const router = useRouter();
   const { mutateAsync: createCost, isPending } = useCreateCost();
+  const { data: groupsData } = useGroupsQuery();
 
-  const methods = useForm<ICreateCostForm>({
+  const groupOptions = (groupsData?.groups ?? []).map((group) => ({
+    label: group.name,
+    value: group.id,
+  }));
+
+  const methods = useForm({
     resolver: yupResolver(addCostSchema),
     mode: "onSubmit",
     defaultValues: {
-      contactId: "",
+      costName: "",
+      totalValue: "",
       category: "" as CostCategory,
-      value: "",
-      percent: "",
+      groupId: "",
+      ownerPercentage: "",
     },
   });
 
@@ -43,10 +47,11 @@ export default function CreateCostForm({ contacts }: CreateCostFormProps) {
   const handleOnSubmit: SubmitHandler<ICreateCostForm> = async (data) => {
     try {
       await createCost({
-        userId: "6186997e-fb6b-4d07-9be9-6610cf6d127c", // same example mock
-        contactId: data.contactId,
-        value: data.value,
+        costName: data.costName,
+        totalValue: Number(data.totalValue),
         category: data.category,
+        ...(data.groupId ? { groupId: data.groupId } : {}),
+        ...(data.ownerPercentage ? { ownerPercentage: Number(data.ownerPercentage) } : {}),
       });
 
       router.push("/costs");
@@ -61,10 +66,11 @@ export default function CreateCostForm({ contacts }: CreateCostFormProps) {
   };
 
   const categoryOptions = [
-    { label: "Food", value: CostCategory.FOOD },
-    { label: "Payment", value: CostCategory.PAYMENT },
+    { label: "Dinner", value: CostCategory.DINNER },
+    { label: "Lunch", value: CostCategory.LUNCH },
     { label: "Entertainment", value: CostCategory.ENTERTAINMENT },
     { label: "Travel", value: CostCategory.TRAVEL },
+    { label: "Others", value: CostCategory.OTHERS },
   ];
 
   return (
@@ -76,12 +82,11 @@ export default function CreateCostForm({ contacts }: CreateCostFormProps) {
               <CardTitle className="text-center">Create Cost</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <HookFormSelect
-                name="contactId"
-                label="Contact"
-                placeholder="Select a contact"
-                groupLabel="Contacts"
-                options={contacts}
+              <HookFormTextInput
+                title="Cost Name"
+                name="costName"
+                label="Dinner at restaurant"
+                type="text"
               />
 
               <HookFormSelect
@@ -93,16 +98,24 @@ export default function CreateCostForm({ contacts }: CreateCostFormProps) {
               />
 
               <HookFormTextInput
-                title="Value"
-                name="value"
+                title="Total Value"
+                name="totalValue"
                 label="100.50"
                 type="text"
               />
 
+              <HookFormSelect
+                name="groupId"
+                label="Group (optional)"
+                placeholder="Select a group"
+                groupLabel="Groups"
+                options={groupOptions}
+              />
+
               <HookFormTextInput
-                title="Percent"
-                name="percent"
-                label="10"
+                title="Your percentage (optional)"
+                name="ownerPercentage"
+                label="50"
                 type="number"
               />
             </CardContent>

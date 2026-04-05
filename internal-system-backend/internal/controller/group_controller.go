@@ -49,7 +49,11 @@ func (gc *GroupController) FindAllGroups(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, view.ConvertGroupDomainListToResponse(groups))
+	groupsResponse := view.ConvertGroupDomainListToResponse(groups)
+	c.JSON(http.StatusOK, gin.H{
+		"groups": groupsResponse,
+		"total":  len(groupsResponse),
+	})
 }
 
 func (gc *GroupController) FindGroupByID(c *gin.Context) {

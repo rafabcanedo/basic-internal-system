@@ -35,17 +35,19 @@ export const addContactSchema = yup.object({
 });
 
 export const addCostSchema = yup.object({
-  contactId: trimmed(yup.string().uuid("Invalid contact ID").required("Contact is required")),
-  value: trimmed(valueField()),
-  percent: yup
-    .string()
-    .required("Percent is required")
-    .test("is-percent", "Invalid percentage. Must be between 0 and 100", (val) => {
-      const num = Number(val);
-      return !isNaN(num) && num >= 0 && num <= 100;
-    }),
+  costName: trimmed(nameField(2)),
+  totalValue: trimmed(valueField()),
   category: yup
     .mixed<CostCategory>()
     .oneOf(Object.values(CostCategory), "Invalid category")
     .required("Category is required"),
+  groupId: yup.string().uuid("Invalid group ID").transform((v) => v || undefined).optional(),
+  ownerPercentage: yup
+    .string()
+    .optional()
+    .test("is-percent", "Invalid percentage. Must be between 0 and 100", (val) => {
+      if (!val) return true;
+      const num = Number(val);
+      return !isNaN(num) && num >= 0 && num <= 100;
+    }),
 });

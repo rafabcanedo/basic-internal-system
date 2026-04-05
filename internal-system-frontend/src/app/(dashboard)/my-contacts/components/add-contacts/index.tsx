@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/dialog"
 import { Loader2 } from "lucide-react"
 import { Button } from "@/components/ui/button";
-import { ContactCategory } from "@/types";
+import { ContactCategory, CreateContactInput } from "@/types";
 import { HookFormTextInput } from "@/components/hook-form-text-input";
 import { SelectCategory } from "../select-category";
 import { addContactSchema } from "@/validations/schemas";
@@ -20,13 +20,6 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { ApiError } from "@/lib/errors/api.error";
 import { useCreateContact } from "@/hooks/mutations/use-contact-mutations";
 
-interface IRegisterContact {
-  name: string;
-  email: string;
-  phone: string;
-  category: ContactCategory;
-}
-
 export const AddContact = () => {
   const [stepModal, setStepModal] = useState(1);
   const [openModal, setOpenModal] = useState(false);
@@ -34,7 +27,7 @@ export const AddContact = () => {
 
   const { mutateAsync: createContact, isPending } = useCreateContact();
 
-  const methods = useForm<IRegisterContact>({
+  const methods = useForm<CreateContactInput>({
     resolver: yupResolver(addContactSchema),
     mode: "onSubmit",
     defaultValues: {
@@ -59,16 +52,12 @@ export const AddContact = () => {
     setIsValidating(false);
   };
 
-  const handleOnSubmit = async (data: IRegisterContact) => {
+  const handleOnSubmit = async (data: CreateContactInput) => {
 
     try {
       await createContact(data);
 
       handleFinish();
-
-      // In the future, we change userId for this
-      //       const session = await getServerSession(); // your method auth
-      // userId: session.user.id
 
     } catch (error) {
       if (error instanceof ApiError && error.status === 409) {

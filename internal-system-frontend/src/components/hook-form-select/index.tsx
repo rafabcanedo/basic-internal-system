@@ -35,7 +35,7 @@ export function HookFormSelect({
             name={name}
             render={({ field }) => (
                 <FormItem>
-                    <FormLabel>{label}</FormLabel>
+                    <FormLabel className="font-normal">{label}</FormLabel>
                     <Select
                         onValueChange={field.onChange}
                         value={field.value}
