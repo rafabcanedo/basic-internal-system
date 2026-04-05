@@ -57,7 +57,7 @@ func RunMigrations() error {
 		{"cost_entities", "fk_users_entities_costs", "user_id", "users_entities(id)", "CASCADE"},
 		{"cost_split_entities", "fk_cost_entities_cost_splits", "cost_id", "cost_entities(id)", "CASCADE"},
 		{"cost_split_entities", "fk_contact_entities_cost_splits", "contact_id", "contact_entities(id)", "CASCADE"},
-		{"group_member_entities", "fk_group_entities_group_members", "group_id", "group_entities(id)", "CASCADE"},
+		{"group_member_entities", "fk_group_entities_members", "group_id", "group_entities(id)", "CASCADE"},
 		{"group_member_entities", "fk_contact_entities_group_members", "contact_id", "contact_entities(id)", "CASCADE"},
 	}
 	for _, f := range fixes {
