@@ -76,5 +76,11 @@ export const authService = {
     return apiCall<{ message: string }>("/auth/logout", {
       method: "POST",
     });
+  },
+
+  async deleteAccount(): Promise<{ message: string }> {
+    return apiCall<{ message: string }>("/auth/profile", {
+      method: "DELETE",
+    });
   }
 };

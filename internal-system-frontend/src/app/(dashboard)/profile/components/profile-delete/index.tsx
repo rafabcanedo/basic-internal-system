@@ -1,8 +1,12 @@
+"use client"
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog"
 import { Button } from "@/components/ui/button"
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "@/components/ui/card"
+import { useDeleteAccountMutation } from "@/hooks/mutations/use-delete-account-mutation"
 
 export const ProfileDelete = () => {
+    const { mutate: deleteAccount, isPending } = useDeleteAccountMutation()
+
     return (
         <Card className="w-[800px] border-red-200">
             <CardHeader>
@@ -32,9 +36,8 @@ export const ProfileDelete = () => {
                             <AlertDialogCancel>Cancel</AlertDialogCancel>
                             <AlertDialogAction
                                 className="bg-red-600 hover:bg-red-700"
-                                onClick={() => {
-                                    // handle delete account
-                                }}
+                                disabled={isPending}
+                                onClick={() => deleteAccount()}
                             >
                                 Delete
                             </AlertDialogAction>
