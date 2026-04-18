@@ -49,7 +49,7 @@ export default function SignInForm() {
                 </Link>
               </div>
 
-              <Button className="w-full" type="submit" disabled={loginMutation.isPending}>
+              <Button className="w-full bg-primary hover:bg-hover" type="submit" disabled={loginMutation.isPending}>
                 {loginMutation.isPending ? "Loading" : "Login"}
               </Button>
             </CardFooter>
@@ -58,7 +58,7 @@ export default function SignInForm() {
                 Don't have an account?
                 <Link
                   href="/signup"
-                  className="hover:underline focus:outline-none ml-1"
+                  className="hover:text-secondary hover:underline focus:outline-none ml-1"
                 >
                   Sign up
                 </Link>

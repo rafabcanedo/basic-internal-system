@@ -55,7 +55,7 @@ export default function ForgotYourPassword() {
             </div>
 
             <div className="mt-4">
-              <Button size="sm" type="submit">
+              <Button className="bg-primary hover:bg-hover" size="sm" type="submit">
                 Reset my passoword
               </Button>
             </div>
@@ -65,7 +65,7 @@ export default function ForgotYourPassword() {
         <div className="flex justify-end mt-4">
           <button
             onClick={() => router.back()}
-            className="bg-transparent font-poppins text-xs h-8 px-4 hover:bg-tambo-primary-hover/60 rounded-sm cursor-pointer"
+            className="bg-transparent font-poppins text-xs text-secondary hover:text-hover h-8 px-4 hover:bg-tambo-primary-hover/60 rounded-sm cursor-pointer"
           >
             Go Back
           </button>

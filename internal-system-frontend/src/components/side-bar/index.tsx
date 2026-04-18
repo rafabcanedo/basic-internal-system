@@ -36,6 +36,10 @@ const data = {
           url: "/costs",
         },
         {
+          title: "Groups",
+          url: "/groups"
+        },
+        {
           title: "Payments",
           url: "/payments",
         },

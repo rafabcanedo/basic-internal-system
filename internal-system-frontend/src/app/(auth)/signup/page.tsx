@@ -44,7 +44,7 @@ export default function SignUpForm() {
               <HookFormTextInput title="Phone" name="phone" label="+55 11 997117911" type="text" />
             </CardContent>
             <CardFooter className="flex justify-end">
-              <Button className="w-full" type="submit" disabled={registerMutation.isPending}>
+              <Button className="w-full bg-primary hover:bg-hover" type="submit" disabled={registerMutation.isPending}>
                 {registerMutation.isPending ? "Loading" : "Register"}
               </Button>
             </CardFooter>
