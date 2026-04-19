@@ -21,7 +21,7 @@ export const GroupCards: FC<IPropsGroupCards> = ({ group, onAddMember }) => {
       <span className="font-poppins font-semibold text-lg text-zinc-700">
         {group.name}
       </span>
-      <div className="flex flex-row flex-wrap gap-2">
+      <div className="flex flex-row flex-wrap items-center gap-2">
         {group.members.map((member) => (
           <div
             key={member.id}
@@ -33,7 +33,7 @@ export const GroupCards: FC<IPropsGroupCards> = ({ group, onAddMember }) => {
         ))}
         <button
           onClick={() => onAddMember?.(group.id)}
-          className="flex items-center justify-center w-9 h-9 rounded-full border border-dashed border-zinc-400 text-zinc-400 hover:border-zinc-600 hover:text-zinc-600 transition-colors cursor-pointer"
+          className="flex items-center justify-center w-6 h-6 rounded-lg border border-zinc-400 text-zinc-400 hover:border-zinc-600 hover:text-zinc-600 transition-colors cursor-pointer"
         >
           <Plus className="w-4 h-4" />
         </button>

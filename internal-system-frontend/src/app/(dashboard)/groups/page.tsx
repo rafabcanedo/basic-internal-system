@@ -1,4 +1,5 @@
 import { GroupCards } from "./components/group-cards";
+import { CreateGroup } from "./components/create-group";
 import { GroupDetail, GroupCategory } from "@/types";
 
 const mockGroups: GroupDetail[] = [
@@ -29,11 +30,19 @@ const mockGroups: GroupDetail[] = [
 
 export default function Groups() {
   return (
-    <div className="flex flex-col gap-4 p-6 max-w-xl">
-      <h1 className="font-poppins font-semibold text-2xl text-zinc-700">Groups</h1>
-      {mockGroups.map((group) => (
-        <GroupCards key={group.id} group={group} />
-      ))}
+    <div className="flex flex-col gap-4 px-8 w-full">
+      <header className="flex flex-row items-center justify-between h-12 mt-4">
+        <h1 className="font-montserrat text-xl text-zinc-600">
+          Your contact list
+        </h1>
+        <CreateGroup />
+      </header>
+
+      <div className="flex flex-col gap-4 max-w-xl">
+        {mockGroups.map((group) => (
+          <GroupCards key={group.id} group={group} />
+        ))}
+      </div>
     </div>
   );
 }

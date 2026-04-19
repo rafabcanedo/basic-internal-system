@@ -1,6 +1,6 @@
 import * as yup from "yup";
 import { emailField, passwordField, nameField, phoneField, trimmed, valueField } from "./fields";
-import { ContactCategory, CostCategory } from "@/types";
+import { ContactCategory, CostCategory, GroupCategory } from "@/types";
 
 export const signInSchema = yup.object({
   email: trimmed(emailField()),
@@ -31,6 +31,14 @@ export const addContactSchema = yup.object({
   category: yup
     .mixed<ContactCategory>()
     .oneOf(Object.values(ContactCategory), "Invalid category")
+    .required("Category is required"),
+});
+
+export const createGroupSchema = yup.object({
+  name: trimmed(nameField(2)),
+  category: yup
+    .mixed<GroupCategory>()
+    .oneOf(Object.values(GroupCategory), "Invalid category")
     .required("Category is required"),
 });
 
