@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/dialog";
 import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { GroupCategory, CreateGroupInput } from "@/types";
+import { TransactionCategory, CreateGroupInput } from "@/types";
 import { HookFormTextInput } from "@/components/hook-form-text-input";
 import { createGroupSchema } from "@/validations/schemas";
 import { FormProvider, useForm } from "react-hook-form";
@@ -37,7 +37,7 @@ export const CreateGroup = () => {
     mode: "onSubmit",
     defaultValues: {
       name: "",
-      category: GroupCategory.OTHERS,
+      category: TransactionCategory.OTHERS,
     },
   });
 
@@ -83,7 +83,7 @@ export const CreateGroup = () => {
               <Select
                 value={methods.watch("category")}
                 onValueChange={(val) =>
-                  methods.setValue("category", val as GroupCategory, {
+                  methods.setValue("category", val as TransactionCategory, {
                     shouldValidate: true,
                   })
                 }
@@ -94,7 +94,7 @@ export const CreateGroup = () => {
                 <SelectContent>
                   <SelectGroup>
                     <SelectLabel>Category</SelectLabel>
-                    {Object.values(GroupCategory).map((cat) => (
+                    {Object.values(TransactionCategory).map((cat) => (
                       <SelectItem key={cat} value={cat}>
                         {cat}
                       </SelectItem>

@@ -12,7 +12,7 @@ import { useForm, FormProvider, SubmitHandler } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { HookFormTextInput } from "@/components/hook-form-text-input";
 import { addCostSchema } from "@/validations/schemas";
-import { CostCategory } from "@/types";
+import { TransactionCategory } from "@/types";
 import { Loader2 } from "lucide-react";
 import { HookFormSelect } from "@/components/hook-form-select";
 import { ICreateCostForm } from "./types";
@@ -36,7 +36,7 @@ export default function CreateCostForm() {
     defaultValues: {
       costName: "",
       totalValue: "",
-      category: "" as CostCategory,
+      category: "" as TransactionCategory,
       groupId: "",
       ownerPercentage: "",
     },
@@ -66,11 +66,11 @@ export default function CreateCostForm() {
   };
 
   const categoryOptions = [
-    { label: "Dinner", value: CostCategory.DINNER },
-    { label: "Lunch", value: CostCategory.LUNCH },
-    { label: "Entertainment", value: CostCategory.ENTERTAINMENT },
-    { label: "Travel", value: CostCategory.TRAVEL },
-    { label: "Others", value: CostCategory.OTHERS },
+    { label: "Dinner", value: TransactionCategory.DINNER },
+    { label: "Lunch", value: TransactionCategory.LUNCH },
+    { label: "Entertainment", value: TransactionCategory.ENTERTAINMENT },
+    { label: "Travel", value: TransactionCategory.TRAVEL },
+    { label: "Others", value: TransactionCategory.OTHERS },
   ];
 
   return (

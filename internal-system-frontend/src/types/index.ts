@@ -4,15 +4,7 @@ export enum ContactCategory {
   WORK = "Work",
 }
 
-export enum CostCategory {
-  DINNER = "Dinner",
-  LUNCH = "Lunch",
-  ENTERTAINMENT = "Entertainment",
-  TRAVEL = "Travel",
-  OTHERS = "Others",
-}
-
-export enum GroupCategory {
+export enum TransactionCategory {
   DINNER = "Dinner",
   LUNCH = "Lunch",
   ENTERTAINMENT = "Entertainment",
@@ -41,23 +33,23 @@ export type GroupMember = {
 export type Group = {
   id: string
   name: string
-  category: GroupCategory
+  category: TransactionCategory
   createdAt: string
   updatedAt: string
 }
 
 export type GroupDetail = Group & {
-  members: GroupMember[]
+  members?: GroupMember[]
 }
 
 export type GetGroupsResponse = {
-  groups: Group[]
+  groups: GroupDetail[]
   total: number
 }
 
 export type CreateGroupInput = {
   name: string
-  category: GroupCategory
+  category: TransactionCategory
   memberIds?: string[]
 }
 
@@ -79,7 +71,7 @@ export type Cost = {
   totalValue: number
   ownerPercentage: number
   ownerValue: number
-  category: CostCategory
+  category: TransactionCategory
   groupId?: string
   groupName?: string
   splitCount: number
@@ -96,14 +88,14 @@ export type GetCostsResponse = Cost[]
 export type CreateCostInput = {
   groupId?: string
   costName: string
-  category: CostCategory
+  category: TransactionCategory
   totalValue: number
   ownerPercentage?: number
 }
 
 export type UpdateCostInput = {
   costName: string
-  category: CostCategory
+  category: TransactionCategory
   totalValue: number
   ownerPercentage?: number
 }
