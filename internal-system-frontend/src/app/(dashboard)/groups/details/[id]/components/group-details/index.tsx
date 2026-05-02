@@ -6,6 +6,7 @@ import { useDeleteGroup } from '@/hooks/mutations/use-group-mutations'
 import { BadgeType } from '@/utils/badge-types'
 import { AddMember } from '../add-member'
 import { Button } from '@/components/ui/button'
+import { ChevronLeft } from 'lucide-react';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -35,13 +36,18 @@ export const GroupDetails = ({ groupId }: IGroupDetailProps) => {
 
   if (!group) return null
 
+  const handleBack = () => router.push('/groups')
+
   const handleDelete = async () => {
     await deleteGroup(groupId)
-    router.push('/groups')
+    handleBack()
   }
 
   return (
     <div className="flex flex-col gap-6 px-8 w-full">
+      <div>
+        <ChevronLeft className='w-8 h-8 text-stone-300 cursor-pointer' onClick={handleBack} />
+      </div>
       <header className="flex flex-row items-center gap-3 h-12 mt-4">
         <h1 className="font-montserrat text-xl text-zinc-700 font-semibold">{group.name}</h1>
         <BadgeType type={group.category} />
